@@ -23,6 +23,7 @@ class EventManager:
 		while alertOpen:
 			self.get()
 			alertOpen = alert.update(self.events)
+			pygame.display.flip()
 
 	def terminate(self):
 		pygame.quit()

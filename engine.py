@@ -43,7 +43,6 @@ class Engine:
 		while self.running:
 			self.event_manager.get()
 			self.interface = self.interface.update(self.event_manager.events)
-
 			pygame.display.flip()
 
 			self.clock.tick(my.FPS)

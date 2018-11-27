@@ -9,20 +9,18 @@ class Menu(ui.UI):
 
 		logo = pygame.image.load("assets/logo.jpg").convert()
 		logo.set_colorkey((0, 0, 0))
-		self.addWidget(label.Image([my.SCREEN_WIDTH / 2, 0], logo))
+		self.addWidget(label.Image([my.SCREEN_WIDTH / 2, 0], logo, centralization=ui.BOTTOM))
 
 		self.playOfflineButton = button.ImageButton(lambda: self.playOffline(),
 													[my.SCREEN_WIDTH / 2, my.SCREEN_HEIGHT],
 													text="Jogar Offline",
 													image_surface=ui.IMAGES['button'],
-													image_pressed=ui.IMAGES['button_pressed'],
-													centralization=ui.LEFT)
+													image_pressed=ui.IMAGES['button_pressed'],)
 		self.playOnlineButton = button.ImageButton(lambda: self.playOnline(),
 												   [my.SCREEN_WIDTH / 2, my.SCREEN_HEIGHT],
 												   text="Jogar Online",
 												   image_surface=ui.IMAGES['button'],
-												   image_pressed=ui.IMAGES['button_pressed'],
-												   centralization=ui.RIGHT)
+												   image_pressed=ui.IMAGES['button_pressed'])
 		self.optionsButton = button.ImageButton(lambda: self.playOnline(),
 												[my.SCREEN_WIDTH / 2, my.SCREEN_HEIGHT],
 												text="Opções",
@@ -48,7 +46,7 @@ class Menu(ui.UI):
 
 		if self.animation:
 			y = 0
-			for button in (self.playOfflineButton, self.playOfflineButton, self.optionsButton, self.creditsButton):
+			for button in (self.playOfflineButton, self.playOnlineButton, self.optionsButton, self.creditsButton):
 				if button.pos[1] > my.SCREEN_HEIGHT / 2 + y:
 					button.pos[1] -= math.fabs(my.SCREEN_HEIGHT / 2 + y - button.pos[1]) * 0.1
 					y += 60
