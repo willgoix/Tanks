@@ -10,9 +10,8 @@ CURSOR_CLICKED = pygame.cursors.diamond
 
 class Button(Widget):
 	def __init__(self, onclick, pos, size, centralization=CENTER):
-		Widget.__init__(self, pos, size)
+		Widget.__init__(self, pos, size, centralization)
 		self.onclick = onclick
-		self.centralization = centralization
 		self.surface = pygame.Surface(size)
 		self.clicked = False
 		self.hovered = False
@@ -105,8 +104,8 @@ class TextButton(Button):
 
 
 class ImageButton(Button):
-	def __init__(self, onclick, pos, text, size=[0, 0], image_surface=None, image_pressed=None, image_hovered=None, centralization=CENTER):
-		Button.__init__(self, onclick, pos, size)
+	def __init__(self, onclick, pos, text, image_surface, image_pressed=None, image_hovered=None, centralization=CENTER):
+		Button.__init__(self, onclick, pos, image_surface.get_size(), centralization)
 
 		self.text = text
 		self.image = pygame.transform.smoothscale(image_surface, self.size)
@@ -162,7 +161,7 @@ class ImageButton(Button):
 
 		screen.blit(image, self.pos)
 
-		fontSurface = FONT(30).render(self.text, True, [0, 0, 0])
+		fontSurface = FONT(image.get_height()-20).render(self.text, True, [0, 0, 0])
 		centralizedX = self.pos[0] + image.get_width() / 2 - fontSurface.get_width() / 2
 		centralizedY = self.pos[1] + image.get_height() / 2 - fontSurface.get_height() / 2
 

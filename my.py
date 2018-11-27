@@ -1,15 +1,18 @@
 import pygame, file
 
 """ GAME """
+ENGINE = None
+LOGO = None
+
 CONFIG = file.File("config", {
-	'screen_width': 600,
-	'screen_height': 400,
+	'screen_width': 900,
+	'screen_height': 600,
 	'windowed': True,
 	'fps': 30,
 	'muted': False})
 
-PLATFORM_WIDTH = CONFIG.get('platform_width')
-PLATFORM_HEIGHT = CONFIG.get('platform_height')
+PLATFORM_WIDTH = 5
+PLATFORM_HEIGHT = 5
 
 SCREEN_WIDTH = CONFIG.get('screen_width')
 SCREEN_HEIGHT = CONFIG.get('screen_height')

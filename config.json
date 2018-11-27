@@ -1,7 +1,7 @@
 {
-    "screen_width": 600,
-    "screen_height": 400,
-    "windowed": true,
     "fps": 30,
-    "muted": false
+    "muted": false,
+    "screen_width": 900,
+    "screen_height": 600,
+    "windowed": true
 }
