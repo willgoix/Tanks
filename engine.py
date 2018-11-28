@@ -1,4 +1,4 @@
-import pygame, my, event, menu, ui.ui, sound
+import pygame, my, ui.ui, event, menu, sound
 
 
 class Engine:
@@ -17,6 +17,7 @@ class Engine:
 		self.clock = None
 		self.event_manager = None
 		self.interface = None
+		self.cursor = None
 		self.running = True
 
 	def adaptScreen(self):
@@ -27,6 +28,10 @@ class Engine:
 			my.SCREEN_WIDTH = screenInfo.current_w
 			my.SCREEN_HEIGHT = screenInfo.current_h
 			self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
+
+	def setCursor(self, cursor):
+		if cursor != self.cursor:
+			self.cursor = cursor
 
 	def run(self):
 		pygame.display.init()
@@ -39,10 +44,14 @@ class Engine:
 		self.clock = pygame.time.Clock()
 		self.event_manager = event.EventManager()
 		self.interface = menu.Menu(self.screen)
+		self.cursor = ui.IMAGES['cursor']
+		pygame.mouse.set_visible(False)
 
 		while self.running:
 			self.event_manager.get()
 			self.interface = self.interface.update(self.event_manager.events)
+			self.screen.blit(self.cursor, pygame.mouse.get_pos())
+
 			pygame.display.flip()
 
 			self.clock.tick(my.FPS)

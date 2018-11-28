@@ -1,7 +1,6 @@
-import pygame
-from .ui import CENTER
+import pygame, my
+from .ui import CENTER, IMAGES
 from .widget import Widget
-from my import BLACK, FONT
 
 CURSOR_NORMAL = pygame.cursors.arrow
 CURSOR_HOVERED = pygame.cursors.broken_x
@@ -34,23 +33,21 @@ class Button(Widget):
 		self.clicked = False
 
 	def update(self, event):
-		if event.type == pygame.MOUSEMOTION:
-			if self.clicked:
-				pygame.mouse.set_cursor(*CURSOR_CLICKED)
-			elif self.hovered:
-				pygame.mouse.set_cursor(*CURSOR_HOVERED)
-			else:
-				pygame.mouse.set_cursor(*CURSOR_NORMAL)
-		elif event.type == pygame.MOUSEBUTTONDOWN:
-			if self.clicked:
-				pygame.mouse.set_cursor(*CURSOR_CLICKED)
+		#if event.type == pygame.MOUSEMOTION:
+		#	if self.clicked:
+		#		my.ENGINE.setCursor(IMAGES['cursor_pressed'])
+		#	else:
+		#		my.ENGINE.setCursor(IMAGES['cursor'])
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			#if self.clicked:
+			my.ENGINE.setCursor(IMAGES['cursor_pressed'])
 		elif event.type == pygame.MOUSEBUTTONUP:
-			if not self.clicked and self.hovered:
-				pygame.mouse.set_cursor(*CURSOR_HOVERED)
+			#if not self.clicked and self.hovered:
+			my.ENGINE.setCursor(IMAGES['cursor'])
 
 
 class TextButton(Button):
-	def __init__(self, onclick, pos, size, text="", color=BLACK, centralization=CENTER):
+	def __init__(self, onclick, pos, size, text="", color=my.BLACK, centralization=CENTER):
 		Button.__init__(self, onclick, pos, size, centralization)
 
 		self.text = text
@@ -96,7 +93,7 @@ class TextButton(Button):
 		self.surface.fill(color)
 		screen.blit(self.surface, self.pos)
 
-		fontSurface = FONT(12).render(self.text, True, [0, 0, 0])
+		fontSurface = my.FONT(12).render(self.text, True, [0, 0, 0])
 		centralizedX = self.pos[0] + self.surface.get_width() / 2 - fontSurface.get_width() / 2
 		centralizedY = self.pos[1] + self.surface.get_height() / 2 - fontSurface.get_height() / 2
 
@@ -161,7 +158,7 @@ class ImageButton(Button):
 
 		screen.blit(image, self.pos)
 
-		fontSurface = FONT(image.get_height()-20).render(self.text, True, [0, 0, 0])
+		fontSurface = my.FONT(image.get_height()-20).render(self.text, True, [0, 0, 0])
 		centralizedX = self.pos[0] + image.get_width() / 2 - fontSurface.get_width() / 2
 		centralizedY = self.pos[1] + image.get_height() / 2 - fontSurface.get_height() / 2
 

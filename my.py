@@ -2,13 +2,12 @@ import pygame, file
 
 """ GAME """
 ENGINE = None
-LOGO = None
 
 CONFIG = file.File("config", {
 	'screen_width': 900,
 	'screen_height': 600,
 	'windowed': True,
-	'fps': 30,
+	'fps': 60,
 	'muted': False})
 
 PLATFORM_WIDTH = 5
@@ -67,6 +66,7 @@ CONCRETE = (149, 165, 166)
 PUMPKIN = (211, 84, 0)
 NICE_BLUE = (52, 152, 219)
 MIDNIGHT_BLUE = (44, 62, 80)
+ALIZARIN = (231, 76, 60)
 
 COLORS = [
 	BLACK, WHITE, GREY, LIGHT_GREY, CONCRETE,

@@ -1,5 +1,5 @@
 import pygame
-from ui import ui, button, label
+from ui import ui, label
 import my
 
 
@@ -14,7 +14,7 @@ class ExitAlert(ui.UI):
 		center.fill((255, 255, 255))
 		self.background.blit(center, (my.SCREEN_WIDTH, my.SCREEN_HEIGHT))
 
-		self.addWidget(label.Image([0, 0], self.background))
+		self.addWidget(label.Image([0, 0], self.background, centralization=ui.RIGHT))
 
 		self.animation = True
 		self.result = True

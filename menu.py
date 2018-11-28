@@ -1,14 +1,12 @@
-import pygame, math
+import pygame, math, my, sound
 from ui import ui, button, label
-import my
 
 
 class Menu(ui.UI):
 	def __init__(self, screen):
 		ui.UI.__init__(self, screen)
 
-		logo = pygame.image.load("assets/logo.jpg").convert()
-		logo.set_colorkey((0, 0, 0))
+		logo = pygame.image.load("assets/logo.png")
 		self.addWidget(label.Image([my.SCREEN_WIDTH / 2, 0], logo, centralization=ui.BOTTOM))
 
 		self.playOfflineButton = button.ImageButton(lambda: self.playOffline(),
@@ -41,7 +39,7 @@ class Menu(ui.UI):
 		self.next = self
 
 	def update(self, events):
-		self.screen.fill(my.MIDNIGHT_BLUE)
+		self.screen.fill((127, 140, 141))
 		super().update(events)
 
 		if self.animation:
@@ -78,15 +76,23 @@ class Menu(ui.UI):
 		return self.next
 
 	def playOffline(self):
-		import sound
 		sound.play('click')
 		self.animation = False
 
 	def playOnline(self):
+		sound.play('click')
 		self.animation = False
 
 	def options(self):
+		sound.play('click')
 		self.animation = False
 
 	def credits(self):
+		sound.play('click')
 		self.animation = False
+
+
+class PlayOfflineMenu(ui.UI):
+
+	def __init__(self, screen):
+		ui.UI.__init__(self, screen)
