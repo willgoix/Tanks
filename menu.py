@@ -6,14 +6,14 @@ class Menu(ui.UI):
 	def __init__(self, screen):
 		ui.UI.__init__(self, screen)
 
-		logo = pygame.image.load("assets/logo.png")
-		self.addWidget(label.Image([my.SCREEN_WIDTH / 2, 0], logo, centralization=ui.BOTTOM))
+		self.logo = label.Image([my.SCREEN_WIDTH / 2, -my.SCREEN_HEIGHT], pygame.image.load("assets/logo.png"), centralization=ui.BOTTOM)
+		self.addWidget(self.logo)
 
 		self.playOfflineButton = button.ImageButton(lambda: self.playOffline(),
 													[my.SCREEN_WIDTH / 2, my.SCREEN_HEIGHT],
 													text="Jogar Offline",
 													image_surface=ui.IMAGES['button'],
-													image_pressed=ui.IMAGES['button_pressed'],)
+													image_pressed=ui.IMAGES['button_pressed'], )
 		self.playOnlineButton = button.ImageButton(lambda: self.playOnline(),
 												   [my.SCREEN_WIDTH / 2, my.SCREEN_HEIGHT],
 												   text="Jogar Online",
@@ -25,7 +25,7 @@ class Menu(ui.UI):
 												image_surface=ui.IMAGES['button'],
 												image_pressed=ui.IMAGES['button_pressed'])
 		self.creditsButton = button.ImageButton(lambda: self.credits(),
-												[my.SCREEN_WIDTH / 2,  my.SCREEN_HEIGHT],
+												[my.SCREEN_WIDTH / 2, my.SCREEN_HEIGHT],
 												text="Créditos",
 												image_surface=ui.IMAGES['button'],
 												image_pressed=ui.IMAGES['button_pressed'])
@@ -33,9 +33,10 @@ class Menu(ui.UI):
 		self.addWidget(self.playOnlineButton)
 		self.addWidget(self.optionsButton)
 		self.addWidget(self.creditsButton)
-		self.addWidget(label.Text([my.SCREEN_WIDTH-5, my.SCREEN_HEIGHT], "Tanks 0.1 dev build", 24, centralization=ui.LEFT | ui.UPPER))
+		self.addWidget(label.Text([my.SCREEN_WIDTH - 5, my.SCREEN_HEIGHT], "Tanks 0.1 dev build", 24, centralization=ui.LEFT | ui.UPPER))
 
 		self.animation = True
+		self.readyToNext = False
 		self.next = self
 
 	def update(self, events):
@@ -43,41 +44,34 @@ class Menu(ui.UI):
 		super().update(events)
 
 		if self.animation:
+			# TO UP
 			y = 0
 			for button in (self.playOfflineButton, self.playOnlineButton, self.optionsButton, self.creditsButton):
 				if button.pos[1] > my.SCREEN_HEIGHT / 2 + y:
-					button.pos[1] -= math.fabs(my.SCREEN_HEIGHT / 2 + y - button.pos[1]) * 0.1
+					button.pos[1] -= int(math.fabs(my.SCREEN_HEIGHT / 2 + y - button.pos[1]) * 0.1)
 					y += 60
 
-		# if self.playOfflineButton.pos[1] > my.SCREEN_HEIGHT / 2 + 50:
-		#	self.playOfflineButton.pos[1] -= math.fabs(my.SCREEN_HEIGHT / 2 + 300 - self.playOfflineButton.pos[1]) * 0.1
-
-		# if self.playOnlineButton.pos[1] > my.SCREEN_HEIGHT / 2 + 50:
-		#	self.playOnlineButton.pos[1] -= math.fabs(my.SCREEN_HEIGHT / 2 + 300 - self.playOnlineButton.pos[1]) * 0.1
-
-		# if self.optionsButton.pos[1] > my.SCREEN_HEIGHT / 2:
-		#	self.optionsButton.pos[1] -= math.fabs(my.SCREEN_HEIGHT / 2 + 300 - self.optionsButton.pos[1]) * 0.1
-
-		# if self.creditsButton.pos[1] > my.SCREEN_HEIGHT / 2:
-		#	self.creditsButton.pos[1] -= math.fabs(my.SCREEN_HEIGHT / 2 + 300 - self.creditsButton.pos[1]) * 0.1
+			# TO DOWN
+			if self.logo.pos[1] < 0:
+				self.logo.pos[1] += math.fabs(self.logo.pos[1]) * 0.1
 		else:
-			if self.playOfflineButton.pos[1] < my.SCREEN_HEIGHT - 1:
-				self.playOfflineButton.pos[1] += (my.SCREEN_HEIGHT + 50 - self.playOfflineButton.pos[1]) * 0.1
+			# TO UP
+			y = 0
+			for button in (self.playOfflineButton, self.playOnlineButton, self.optionsButton, self.creditsButton):
+				if button.pos[1] < my.SCREEN_HEIGHT:
+					button.pos[1] += (my.SCREEN_HEIGHT + y - button.pos[1]) * 0.1
+					y += 60
 
-			if self.playOnlineButton.pos[1] < my.SCREEN_HEIGHT - 1:
-				self.playOnlineButton.pos[1] += (my.SCREEN_HEIGHT + 50 - self.playOnlineButton.pos[1]) * 0.1
-
-			if self.optionsButton.pos[1] < my.SCREEN_HEIGHT - 1:
-				self.optionsButton.pos[1] += (my.SCREEN_HEIGHT + 50 - self.optionsButton.pos[1]) * 0.1
-
-			if self.creditsButton.pos[1] < my.SCREEN_HEIGHT - 1:
-				self.creditsButton.pos[1] += (my.SCREEN_HEIGHT + 50 - self.creditsButton.pos[1]) * 0.1
+			# TO DOWN
+			if self.logo.pos[1] < 0:
+				self.logo.pos[1] += math.fabs(self.logo.pos[1]) * 0.1
 
 		return self.next
 
 	def playOffline(self):
 		sound.play('click')
 		self.animation = False
+		self.next = PlayOfflineMenu(self.screen)
 
 	def playOnline(self):
 		sound.play('click')
@@ -96,3 +90,13 @@ class PlayOfflineMenu(ui.UI):
 
 	def __init__(self, screen):
 		ui.UI.__init__(self, screen)
+
+		self.addWidget(label.Text([100, 100], "Teste", 24))
+
+		self.next = self
+
+	def update(self, events):
+		self.screen.fill((127, 140, 141))
+		super().update(events)
+
+		return self.next
