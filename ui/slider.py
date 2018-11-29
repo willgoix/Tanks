@@ -1,4 +1,4 @@
-import pygame
+import pygame, my
 from .widget import Widget
 from .ui import CENTER, IMAGES
 
@@ -52,6 +52,13 @@ class SliderBar(Widget):
 				self.onchange(self.get())
 
 	def render(self, screen):
+		slider_end = IMAGES['slider_end']
+		pos_start = (self.pos[0] - slider_end.get_width() + 1, self.pos[1])
+		pos_end = (self.pos[0] + self.size[0] - 1, self.pos[1])
+		screen.blit(slider_end, pos_start)
+		screen.blit(slider_end, pos_end)
+		screen.blit(my.FONT(12).render(str(self.min), True, (0, 0, 0)), (pos_start[0], pos_start[1] + 15))
+		screen.blit(my.FONT(12).render(str(self.max), True, (0, 0, 0)), (pos_end[0], pos_end[1] + 15))
+
 		screen.blit(self.image_slider, self.pos)
-		screen.blit(self.image_pointer, (
-		self.getValueToPixel() - self.image_pointer.get_width() / 2, self.pos[1] - self.image_pointer.get_height() / 2))
+		screen.blit(self.image_pointer, (self.getValueToPixel() - self.image_pointer.get_width() / 2, self.pos[1] - self.image_pointer.get_height() / 2))
