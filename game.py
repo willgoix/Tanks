@@ -33,7 +33,7 @@ class Game:
         self.background = pygame.transform.scale(self.background, (my.SCREEN_WIDTH, my.SCREEN_HEIGHT))
 
         self.screen = pygame.display.set_mode((my.SCREEN_WIDTH, my.SCREEN_HEIGHT))
-        pygame.display.set_caption("Minhoquinhas - v0.1")
+        pygame.display.set_caption("Minhoquinhas - v", my.VERSION)
 
         total_width = 100 * my.PLATFORM_WIDTH
         total_height = 100 * my.PLATFORM_HEIGHT

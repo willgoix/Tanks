@@ -159,7 +159,7 @@ class ImageButton(Button):
 
         screen.blit(image, self.pos)
 
-        fontSurface = my.FONT(image.get_height() - 20).render(self.text, True, [0, 0, 0])
+        fontSurface = my.FONT(image.get_height() - 30).render(self.text, True, [0, 0, 0])
         centralizedX = self.pos[0] + image.get_width() / 2 - fontSurface.get_width() / 2
         centralizedY = self.pos[1] + image.get_height() / 2 - fontSurface.get_height() / 2
 

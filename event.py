@@ -4,6 +4,7 @@ from sys import exit
 
 class EventManager:
 	def __init__(self):
+		self.clicked = False
 		self.events = []
 
 	def get(self):
@@ -15,15 +16,15 @@ class EventManager:
 			if event.type == pygame.KEYDOWN and event.key == pygame.K_F11:
 				my.WINDOWED = not my.WINDOWED
 				my.ENGINE.adaptScreen()
+
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				self.clicked = True
+			elif event.type == pygame.MOUSEBUTTONUP:
+				self.clicked = False
 		# TODO: Corrigir tamanho quando está em tela cheia
 
 	def showConfirmExitAlert(self):
-		alertOpen = True
-		alert = exitalert.ExitAlert(my.ENGINE.screen)
-		while alertOpen:
-			self.get()
-			alertOpen = alert.update(self.events)
-			pygame.display.flip()
+		my.ENGINE.interface = exitalert.ExitAlert(my.ENGINE.screen)
 
 	def terminate(self):
 		pygame.quit()
