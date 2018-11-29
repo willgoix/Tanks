@@ -105,6 +105,13 @@ class PlayOfflineMenu(ui.UI):
 										  image_surface=ui.IMAGES['button'],
 										  image_pressed=ui.IMAGES['button_pressed']))
 
+		self.addWidget(button.Drop(self, ['XXXXXXXXXXXXXXX', 'botao 2'], partial(self.select),
+								   [my.SCREEN_HALF_WIDTH, 100],
+								   text="Infos",
+								   image_surface=ui.IMAGES['button'],
+								   image_pressed=ui.IMAGES['button_pressed'],
+								   down=True))
+
 		self.next = self
 
 	def update(self, events):
@@ -115,6 +122,9 @@ class PlayOfflineMenu(ui.UI):
 
 	def back(self):
 		self.next = Menu(self.screen)
+
+	def select(self, content):
+		print(content, " selected")
 
 
 class PlayOnlineMenu(ui.UI):
@@ -149,9 +159,11 @@ class OptionsMenu(ui.UI):
 		self.fpsValue = label.Text([my.SCREEN_HALF_WIDTH + 25, 60], str(my.FPS), fontsize=20)
 		self.addWidget(self.fpsValue)
 		self.addWidget(label.Text([my.SCREEN_HALF_WIDTH - 25, 60], "FPS", fontsize=20))
-		self.addWidget(slider.SliderBar(partial(self.sliderFps), [my.SCREEN_HALF_WIDTH, 100], (300, 5), min=20, max=100, step=1, initial=my.FPS,
-										image_slider=ui.IMAGES['slider'],
-										image_pointer=ui.IMAGES['slider_pointer']))
+		self.addWidget(
+			slider.SliderBar(partial(self.sliderFps), [my.SCREEN_HALF_WIDTH, 100], (300, 5), min=20, max=100, step=1,
+							 initial=my.FPS,
+							 image_slider=ui.IMAGES['slider'],
+							 image_pointer=ui.IMAGES['slider_pointer']))
 
 		self.addWidget(button.ImageButton(lambda: self.back(),
 										  [my.SCREEN_HALF_WIDTH - 20, my.SCREEN_HEIGHT - 100],
@@ -196,7 +208,8 @@ class CreditsMenu(ui.UI):
 		self.addWidget(label.Text([250, 160], "Lucas Verona ~the h4ck3r m4n", fontsize=20, centralization=ui.RIGHT))
 
 		self.addWidget(label.Text([200, 210], "Texturas por:", fontsize=24, centralization=ui.RIGHT))
-		self.addWidget(label.Text([250, 250], "(UI): Kenney Vleugels (www.kenney.nl)", fontsize=20, centralization=ui.RIGHT))
+		self.addWidget(
+			label.Text([250, 250], "(UI): Kenney Vleugels (www.kenney.nl)", fontsize=20, centralization=ui.RIGHT))
 
 		self.addWidget(button.ImageButton(lambda: self.back(),
 										  [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT - 100],

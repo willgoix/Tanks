@@ -36,6 +36,9 @@ class UI:
 	def __del__(self):
 		self.widgets.clear()
 
+	def removeWidget(self, widget):
+		self.widgets.remove(widget)
+
 	def addWidget(self, widget):
 		self.widgets.append(widget)
 		widget.render(self.screen)
