@@ -105,13 +105,6 @@ class PlayOfflineMenu(ui.UI):
 										  image_surface=ui.IMAGES['button'],
 										  image_pressed=ui.IMAGES['button_pressed']))
 
-		self.addWidget(button.Drop(self, ['XXXXXXXXXXXXXXX', 'botao 2'], partial(self.select),
-								   [my.SCREEN_HALF_WIDTH, 100],
-								   text="Infos",
-								   image_surface=ui.IMAGES['button'],
-								   image_pressed=ui.IMAGES['button_pressed'],
-								   down=True))
-
 		self.next = self
 
 	def update(self, events):
@@ -165,6 +158,13 @@ class OptionsMenu(ui.UI):
 							 image_slider=ui.IMAGES['slider'],
 							 image_pointer=ui.IMAGES['slider_pointer']))
 
+		self.addWidget(button.Drop(self, ['FULLSCREEN', '1920 x 1080', '1280 x 1080', '960 x 680', '660 x 480'], partial(self.selectResolution),
+								   [my.SCREEN_HALF_WIDTH, 100],
+								   text="Resolução",
+								   image_surface=ui.IMAGES['button'],
+								   image_pressed=ui.IMAGES['button_pressed'],
+								   down=True))
+
 		self.addWidget(button.ImageButton(lambda: self.back(),
 										  [my.SCREEN_HALF_WIDTH - 20, my.SCREEN_HEIGHT - 100],
 										  text="Voltar",
@@ -189,12 +189,32 @@ class OptionsMenu(ui.UI):
 		self.fpsValue.text = str(value)
 		my.CONFIG.set('fps', value)
 
+	def selectResolution(self, value):
+		if value == 'FULLSCREEN':
+			my.CONFIG.set('windowed', False)
+		else:
+			my.CONFIG.set('windowed', True)
+			my.CONFIG.set('screen_width', int(value.split(" x ")[0]))
+			my.CONFIG.set('screen_height', int(value.split(" x ")[1]))
+
 	def back(self):
 		self.next = Menu(self.screen)
 
 	def save(self):
 		self.next = Menu(self.screen)
 		my.FPS = my.CONFIG.get('fps')
+
+		oldwidth = my.SCREEN_WIDTH
+		my.WINDOWED = my.CONFIG.get('windowed')
+		my.SCREEN_WIDTH = my.CONFIG.get('screen_width')
+		my.SCREEN_HEIGHT = my.CONFIG.get('screen_height')
+		my.SCREEN_HALF_WIDTH = my.CONFIG.get('screen_width') / 2
+		my.SCREEN_HALF_HEIGHT = my.CONFIG.get('screen_height') / 2
+		my.SCREEN_SIZE = (my.SCREEN_WIDTH, my.SCREEN_HEIGHT)
+		my.SCREEN_HALF_SIZE = (my.SCREEN_HALF_WIDTH, my.SCREEN_HALF_HEIGHT)
+		if my.CONFIG.get('screen_width') != oldwidth:
+			my.ENGINE.adaptScreen()
+
 		my.CONFIG.save()
 
 

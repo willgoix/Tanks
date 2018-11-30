@@ -33,7 +33,8 @@ class Engine:
 			screenInfo = pygame.display.Info()
 			my.SCREEN_WIDTH = screenInfo.current_w
 			my.SCREEN_HEIGHT = screenInfo.current_h
-			self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
+			flags = pygame.FULLSCREEN | (pygame.HWSURFACE | pygame.DOUBLEBUF)
+			self.screen = pygame.display.set_mode((0, 0), )
 
 	def setCursor(self, cursor):
 		if cursor != self.cursor:

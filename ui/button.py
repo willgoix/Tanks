@@ -160,7 +160,7 @@ class ImageButton(Button):
 
 		screen.blit(image, self.pos)
 
-		fontSurface = my.FONT(image.get_height() - 30).render(self.text, True, [0, 0, 0])
+		fontSurface = my.FONT(int(image.get_height() - (79 % image.get_height()))).render(self.text, True, [0, 0, 0])
 		centralizedX = self.pos[0] + image.get_width() / 2 - fontSurface.get_width() / 2
 		centralizedY = self.pos[1] + image.get_height() / 2 - fontSurface.get_height() / 2
 
@@ -178,6 +178,17 @@ class Drop(ImageButton):
 
 		self.image_arrow = IMAGES['arrow_down'] if down else IMAGES['arrow_up']
 
+	def adaptSelectFunction(self, value):
+		self.onclick(value)
+		self.deleteContentButtons()
+
+	def deleteContentButtons(self):
+		self.image_arrow = IMAGES['arrow_down']
+
+		for contentButton in self.contentsButtons:
+			self.ui.removeWidget(contentButton)
+		self.contentsButtons.clear()
+
 	def update(self, event):
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			if event.pos in self:
@@ -194,18 +205,14 @@ class Drop(ImageButton):
 						elif content == len(self.contents) - 1:
 							image = IMAGES['dropdown_bottom']
 
-						button = ImageButton(partial(self.onclick, self.contents[content]),
+						button = ImageButton(partial(self.adaptSelectFunction, self.contents[content]),
 											 (self.pos[0] + self.size[0] / 2,
 											  self.pos[1] + self.size[1] + 12 + content * 24), self.contents[content],
 											 image)
 						self.contentsButtons.append(button)
 						self.ui.addWidget(button)
 				else:
-					self.image_arrow = IMAGES['arrow_down']
-
-					for contentButton in self.contentsButtons:
-						self.ui.removeWidget(contentButton)
-					self.contentsButtons.clear()
+					self.deleteContentButtons()
 
 		elif event.type == pygame.MOUSEBUTTONUP:
 			self.unclick()

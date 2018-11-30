@@ -9,7 +9,8 @@ CONFIG = file.File("config", {
 	'screen_height': 600,
 	'windowed': True,
 	'fps': 60,
-	'muted': False})
+	'muted': False,
+	'hardware_accelerated': False})
 
 PLATFORM_WIDTH = 5
 PLATFORM_HEIGHT = 5
@@ -25,6 +26,7 @@ SCREEN_HALF_SIZE = (SCREEN_HALF_WIDTH, SCREEN_HALF_HEIGHT)
 WINDOWED = CONFIG.get("windowed")
 FPS = CONFIG.get('fps')
 MUTED = CONFIG.get("muted")
+HARDWARE_ACCELERATED = CONFIG.get('hardware_accelerated')
 
 """ PHYSICS"""
 GRAVITY = pygame.Vector2((0, 0.3))
