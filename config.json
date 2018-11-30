@@ -1,8 +1,8 @@
 {
-    "fps": 65,
+    "fps": 60,
+    "hardware_accelerated": false,
     "muted": false,
-    "screen_height": 680,
-    "screen_width": 960,
-    "windowed": true,
-    "hardware_accelerated": false
+    "screen_height": 480,
+    "screen_width": 660,
+    "windowed": true
 }
