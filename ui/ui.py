@@ -20,8 +20,8 @@ IMAGES = {}
 
 def loadImages(directory):
 	for filename in listdir(directory):
-		image = pygame.image.load('{}/{}'.format(directory, filename)).convert()
-		image.set_colorkey((0, 0, 0))
+		image = pygame.image.load('{}/{}'.format(directory, filename))#.convert()
+		#image.set_colorkey((0, 0, 0))
 		IMAGES[filename.split(".")[0]] = image
 
 
@@ -48,4 +48,9 @@ class UI:
 			for event in events:
 				if hasattr(event, 'pos'):
 					widget.update(event)
+					continue
+
+				if widget.__module__ == 'ui.input':
+					if event.type == pygame.KEYDOWN:
+						widget.update(event)
 			widget.render(self.screen)

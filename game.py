@@ -1,99 +1,99 @@
-import pygame, sprites, map, my
-from camera import CameraAwareLayeredUpdates
+import pygame, map, my, entities, camera, hud, loading, tank, bullet, gameserver, turn, sound
 from random import randint
-from math import cos, sin
-from menu import Menu
 
-
-# https://github.com/jmoenig/morphic.py/blob/master/morphic.py
 
 class Game:
-    def __init__(self):
-        self.screen = None
-        self.player = None
-        self.map = None
-        self.entities = None
 
-        self.background = None
+	def __init__(self, online, width, height, seed, enemiesCount):
+		self.online = online
+		self.width = width
+		self.height = height
+		self.seed = seed
+		self.enemiesCount = enemiesCount
 
-        self.running = True
-        self.menu = None
+		self.player = None
+		self.entities = None
+		self.map = None
+		self.hud = None
+		self.turncontroller = None
+		self.running = False
 
-    # self.window = MenuWindow()
+	def start(self):
+		self.hud = loading.Loading(my.ENGINE.screen)
 
-    def init(self):
-        # TODO: Remover isso daqui, e fazer com que o preto das partes transparentes ao usar .convert() não apareça.
-        for img in sprites.IMAGES:
-            if sprites.IMAGES[img] is not None:
-                sprites.IMAGES[img].set_colorkey((0, 0, 0))
-                sprites.IMAGES[img].set_colorkey((255, 0, 255))
+		self.hud.setStatus('Gerando mapa...', 20)
+		self.map = map.Map(self.width, self.height, self.seed)
+		self.map.generate()
 
-        self.background = pygame.image.load("assets/backgrounds/top_" + str(randint(1, 1)) + ".png")
-        self.background.blit(pygame.image.load("assets/backgrounds/bottom_" + str(randint(1, 3)) + ".png"), (0, 0))
-        self.background = pygame.transform.scale(self.background, (my.SCREEN_WIDTH, my.SCREEN_HEIGHT))
+		self.hud.setStatus('Carregando entidades...', 50)
+		self.player = entities.Player(self, 'Tester', tank.TankDefault(), (100, 100))
+		self.entities = camera.CameraAwareLayeredUpdates(self.player, pygame.Rect(0, 0, self.width, self.height))
+		self.entities.add(self.map) #Adicionando o mapa em entidades para poder ser scrollado
+		for i in range(0, self.enemiesCount):
+			x = randint(50, self.width-50)
+			self.entities.add(entities.Enemy(self, tank.TankDefault(), (x, self.map.getMaxHeight(x))))
 
-        self.screen = pygame.display.set_mode((my.SCREEN_WIDTH, my.SCREEN_HEIGHT))
-        pygame.display.set_caption("Minhoquinhas - v", my.VERSION)
+		self.hud.setStatus('Carregando interface...', 80)
+		self.hud = hud.Hud(self, my.ENGINE.screen)
+		my.ENGINE.interface = self.hud
+		self.turncontroller = turn.TurnController(self)
+		self.turncontroller.start()
 
-        total_width = 100 * my.PLATFORM_WIDTH
-        total_height = 100 * my.PLATFORM_HEIGHT
-        self.player = sprites.Player(self, my.PLATFORM_WIDTH, my.PLATFORM_HEIGHT)
-        self.entities = CameraAwareLayeredUpdates(self.player, pygame.Rect(20, 20, total_width, total_height))
+		self.running = True
 
-        self.map = map.Map(100, 100)
-        self.map.generate(self)
+	def tick(self):
+		if self.running:
+			for e in my.ENGINE.event_manager.events:
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
+					bullet.Bullet.from_local((self.player.rect.x, self.player.rect.y), 10, False)
+					#explosion.Explosion([self.player.rect.x, self.player.rect.y])
 
-        self.menu = Menu(self.screen)
+			""" ATUALIZANDO """
+			self.entities.update()
 
-    def loop(self):
-        self.eventsTick = pygame.event.get()
-        for event in self.eventsTick:
-            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                self.running = False
+			""" DESENHANDO """
+			self.entities.draw(my.ENGINE.screen)
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                # playerNew = sprites.Player(self, PLATFORM_WIDTH, PLATFORM_HEIGHT)
-                # self.entities.setTarget(playerNew)
+	def checkWinner(self):
+		lives = self.getLiveEntities()
 
-                mapx = self.player.rect.x // my.PLATFORM_WIDTH
-                mapy = self.player.rect.y // my.PLATFORM_HEIGHT
+		if len(lives) == 1:
+			winner = lives[0]
 
-                circle = pygame.draw.circle(self.screen, (255, 0, 255), (self.player.rect.x, self.player.rect.y), 20)
-                for x in range(mapx - 5, mapx + 5):
-                    for y in range(mapy - 5, mapy + 5):
-                        platform = self.map.getPlatform(x, y)
-                        if platform in circle:
-                            print("PLAT")
-                            platform.kill()
-                            platform.remove()
-
-        """ ATUALIZANDO """
-        # self.entities.update()
-
-        """ DESENHANDO """
-        self.screen.blit(self.background, (0, 0))
-        # self.entities.draw(self.screen)
-
-        self.menu.update(self.eventsTick)
-
-        """ ATUALIZANDO TELA """
-        pygame.display.flip()
-        my.CLOCK.tick(my.FPS)
+			if winner == self.player:
+				sound.play('you_win')
 
 
-def runGame():
-    game = Game()
-    game.init()
+	def getLiveEntities(self):
+		list = []
+		for entity in self.entities:
+			if isinstance(entity, entities.Player) or isinstance(entity, entities.Enemy):
+				list.append(entity)
+		return list
 
-    while game.running:
-        game.loop()
+	def getPlayers(self):
+		players = []
+		for entity in self.entities:
+			if isinstance(entity, entities.Player):
+				players.append(entity)
+		return players
+
+	def getPlayer(self, id):
+		for entity in self.entities:
+			if isinstance(entity, entities.Player):
+				if entity.id == id:
+					return entity
 
 
-from time import sleep
+class GameOffline(Game):
 
-if __name__ == "__main__":
-    try:
-        runGame()
-    except Exception as e:
-        print(e)
-        sleep(1000)
+	def __init__(self, width, height, seed, enemiesCount):
+		Game.__init__(self, False, width, height, seed, enemiesCount)
+
+
+class GameOnline(Game):
+
+	def __init__(self, width, height, seed, enemiesCount, isServer):
+		Game.__init__(self, True, width, height, seed, enemiesCount)
+		self.isServer = isServer
+		self.server = gameserver.GameServer('localhost')

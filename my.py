@@ -28,6 +28,17 @@ FPS = CONFIG.get('fps')
 MUTED = CONFIG.get("muted")
 HARDWARE_ACCELERATED = CONFIG.get('hardware_accelerated')
 
+BLOCK_NONE = 0
+BLOCK_DIRT = 1
+BLOCK_ROCK = 2
+BLOCK_GRASS = 3
+BLOCK_COLORS = {
+	BLOCK_NONE: (0, 0, 0, 0),
+	BLOCK_DIRT: (117, 76, 16, 255),
+	BLOCK_ROCK: (141, 155, 141, 255),
+	BLOCK_GRASS: (48, 219, 48, 255)
+}
+
 """ PHYSICS"""
 GRAVITY = pygame.Vector2((0, 0.3))
 
@@ -50,6 +61,9 @@ def FONT_HIGH(size, bold=False, italic=False, underline=False):
 	font.set_underline(underline)
 	return font
 
+
+NAMES = ["Stalin", "Lenin", "Mussolini", "Hitler", "Trump", "Bolsonaro", "Lula",
+		 "Mansilha", "Coelho", "Claiton"]
 
 """ COLORS """
 BLACK = (52, 73, 94)

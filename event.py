@@ -24,7 +24,7 @@ class EventManager:
 		# TODO: Corrigir tamanho quando está em tela cheia
 
 	def showConfirmExitAlert(self):
-		my.ENGINE.interface = exitalert.ExitAlert(my.ENGINE.screen)
+		my.ENGINE.interface = exitalert.ExitAlert(my.ENGINE.screen, my.ENGINE.interface)
 
 	def terminate(self):
 		pygame.quit()

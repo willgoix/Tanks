@@ -1,8 +1,4 @@
-import pygame
-from my import SCREEN_WIDTH, SCREEN_HEIGHT
-
-SCREEN_WIDTH_HALF = SCREEN_WIDTH / 2
-SCREEN_HEIGHT_HALF = SCREEN_HEIGHT / 2
+import pygame, my
 
 
 class CameraAwareLayeredUpdates(pygame.sprite.LayeredUpdates):
@@ -20,13 +16,13 @@ class CameraAwareLayeredUpdates(pygame.sprite.LayeredUpdates):
 		if self.target: self.add(target)
 
 	def update(self, *args):
-		super().update(*args)
+		pygame.sprite.LayeredUpdates.update(self, *args)
 		if self.target:
-			x = -self.target.rect.center[0] + SCREEN_WIDTH_HALF
-			y = -self.target.rect.center[1] + SCREEN_HEIGHT_HALF
+			x = -self.target.rect.center[0] + my.SCREEN_HALF_WIDTH
+			y = -self.target.rect.center[1] + my.SCREEN_HALF_HEIGHT
 			self.cam += (pygame.Vector2((x, y)) - self.cam) * 0.05
-			self.cam.x = max(-(self.world_size.width - SCREEN_WIDTH), min(0, self.cam.x))
-			self.cam.y = max(-(self.world_size.height - SCREEN_HEIGHT), min(0, self.cam.y))
+			self.cam.x = max(-(self.world_size.width - my.SCREEN_WIDTH), min(0, self.cam.x))
+			self.cam.y = max(-(self.world_size.height - my.SCREEN_HEIGHT), min(0, self.cam.y))
 
 	def draw(self, surface):
 		spritedict = self.spritedict

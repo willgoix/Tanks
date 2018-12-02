@@ -3,8 +3,7 @@ import pygame
 pygame.mixer.pre_init(44100, 16, 2, 1024)
 pygame.init()
 
-import my, ui.ui, event, menu, sound
-
+import my, ui.ui, event, menu, sound, bullet, explosion
 
 class Engine:
 
@@ -20,6 +19,7 @@ class Engine:
 		self.screen.blit(text, (my.SCREEN_HALF_WIDTH - text.get_size()[0] / 2, my.SCREEN_HALF_HEIGHT))
 		pygame.display.update()
 
+		self.game = None
 		self.clock = None
 		self.event_manager = None
 		self.interface = None
@@ -30,11 +30,7 @@ class Engine:
 		if my.WINDOWED:
 			self.screen = pygame.display.set_mode((my.SCREEN_WIDTH, my.SCREEN_HEIGHT))  # , pygame.NOFRAME)
 		else:
-			screenInfo = pygame.display.Info()
-			my.SCREEN_WIDTH = screenInfo.current_w
-			my.SCREEN_HEIGHT = screenInfo.current_h
-			flags = pygame.FULLSCREEN | (pygame.HWSURFACE | pygame.DOUBLEBUF)
-			self.screen = pygame.display.set_mode((0, 0), )
+			self.screen = pygame.display.set_mode((my.SCREEN_WIDTH, my.SCREEN_HEIGHT), pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF if my.HARDWARE_ACCELERATED else pygame.FULLSCREEN)
 
 	def setCursor(self, cursor):
 		if cursor != self.cursor:
@@ -45,6 +41,8 @@ class Engine:
 		pygame.font.init()
 
 		ui.loadImages('assets/ui')
+		bullet.loadImages('assets/bullets')
+		explosion.loadImages('assets/explosion')
 		sound.loadSounds('assets/sounds')
 
 		self.clock = pygame.time.Clock()
@@ -56,6 +54,10 @@ class Engine:
 		while self.running:
 			self.event_manager.get()
 			self.interface = self.interface.update(self.event_manager.events)
+
+			if self.game is not None:
+				self.game.tick()
+
 			self.screen.blit(self.cursor, pygame.mouse.get_pos())
 
 			pygame.display.flip()

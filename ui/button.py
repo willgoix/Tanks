@@ -34,16 +34,9 @@ class Button(Widget):
 		self.clicked = False
 
 	def update(self, event):
-		# if event.type == pygame.MOUSEMOTION:
-		#	if self.clicked:
-		#		my.ENGINE.setCursor(IMAGES['cursor_pressed'])
-		#	else:
-		#		my.ENGINE.setCursor(IMAGES['cursor'])
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			# if self.clicked:
 			my.ENGINE.setCursor(IMAGES['cursor_pressed'])
 		elif event.type == pygame.MOUSEBUTTONUP:
-			# if not self.clicked and self.hovered:
 			my.ENGINE.setCursor(IMAGES['cursor'])
 
 

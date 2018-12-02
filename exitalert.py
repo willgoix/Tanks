@@ -4,8 +4,9 @@ from menu import Menu
 
 
 class ExitAlert(ui.UI):
-	def __init__(self, screen):
+	def __init__(self, screen, lastUI):
 		ui.UI.__init__(self, screen)
+		self.lastUI = lastUI
 
 		copy = screen.copy()
 		self.background = pygame.Surface((my.SCREEN_WIDTH, my.SCREEN_HEIGHT), flags=pygame.SRCALPHA)
@@ -27,7 +28,7 @@ class ExitAlert(ui.UI):
 		self.next = self
 
 	def update(self, events):
-		super().update(events)
+		ui.UI.update(self, events)
 
 		return self.next
 
@@ -35,4 +36,4 @@ class ExitAlert(ui.UI):
 		pygame.quit()
 
 	def backGame(self):
-		self.next = Menu(self.screen)
+		self.next = self.lastUI
