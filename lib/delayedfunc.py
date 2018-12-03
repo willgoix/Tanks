@@ -1,32 +1,32 @@
-import threading, time
+import threading
+import time
 
 queue = []
 
 
 def cancelAll():
-    for funcs in queue:
-        funcs.cancel()
-    queue.clear()
+	for funcs in queue:
+		funcs.cancel()
+	queue.clear()
 
 class DelayedFunc:
 
-    def __init__(self, function, delay):
-        self.function = function
-        self.delay = delay
-        self.alive = True
+	def __init__(self, function, delay):
+		self.function = function
+		self.delay = delay
 
-        def func():
-            while self.delay > 0 or self.alive:
-                self.delay -= 1
-                time.sleep(1)
+		def func():
+			while self.delay > 0 and self.thread.isAlive:
+				self.delay -= 1
+				time.sleep(1)
 
-                if self.delay <= 0:
-                    self.function()
+				if self.delay <= 0:
+					self.function()
 
-        thread = threading.Thread(target=func)
-        thread.start()
+		self.thread = threading.Thread(target=func)
+		self.thread.start()
 
-        queue.append(self)
+		queue.append(self)
 
-    def cancel(self):
-        self.alive = False
+	def cancel(self):
+		self.thread.isAlive = False
