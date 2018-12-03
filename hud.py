@@ -3,6 +3,7 @@ from ui import ui, label, bar
 from functools import partial
 
 
+
 class Hud(ui.UI):
 
 	def __init__(self, game, screen):
@@ -50,7 +51,7 @@ class Hud(ui.UI):
 		del self.playersWidgets[entity.id]
 
 	def update(self, events):
-		self.screen.fill((255, 255, 255))
+		self.screen.fill(my.RED)
 
 		for entity in self.game.getLiveEntities():
 			self.playersWidgets[entity.id][0].pos = [entity.rect.x, entity.rect.y - 50]

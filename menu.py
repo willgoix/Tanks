@@ -7,16 +7,12 @@ BACKGROUND = None
 
 class Menu(ui.UI):
 
-	def input(self,te):
-		print(te)
-
 	def __init__(self, screen):
 		ui.UI.__init__(self, screen)
 		global BACKGROUND
 		BACKGROUND = pygame.transform.scale(ui.IMAGES['background'], my.SCREEN_SIZE)
 
-		self.logo = label.Image([my.SCREEN_HALF_WIDTH, -my.SCREEN_HEIGHT], pygame.image.load("assets/logo.png"),
-								centralization=ui.BOTTOM)
+		self.logo = label.Image([my.SCREEN_HALF_WIDTH, -my.SCREEN_HEIGHT], pygame.image.load("assets/logo.png"), centralization=ui.BOTTOM)
 		self.addWidget(self.logo)
 
 		self.playOfflineButton = button.ImageButton(lambda: self.playOffline(),
@@ -143,8 +139,9 @@ class PlayOfflineMenu(ui.UI):
 		self.next = Menu(self.screen)
 
 	def startGame(self):
+		#TODO: Configurável o tamanho
 		def start():
-			my.ENGINE.game = game.GameOffline(my.SCREEN_WIDTH + 400, my.SCREEN_HEIGHT, 1003, int(self.enemiesValue.text))
+			my.ENGINE.game = game.GameOffline(600, my.SCREEN_HEIGHT, 1003, int(self.enemiesValue.text))
 			my.ENGINE.game.start()
 
 		self.threadStarting = threading.Thread(target=start)

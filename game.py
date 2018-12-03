@@ -21,11 +21,11 @@ class Game:
 	def start(self):
 		self.hud = loading.Loading(my.ENGINE.screen)
 
-		self.hud.setStatus('Gerando mapa...', 20)
+		#self.hud.setStatus('Gerando mapa...', 20)
 		self.map = map.Map(self.width, self.height, self.seed)
 		self.map.generate()
 
-		self.hud.setStatus('Carregando entidades...', 50)
+		self.hud.setStatus('Carregando entidades...', 80)
 		self.player = entities.Player(self, 'Tester', tank.TankDefault(), (100, 100))
 		self.entities = camera.CameraAwareLayeredUpdates(self.player, pygame.Rect(0, 0, self.width, self.height))
 		self.entities.add(self.map) #Adicionando o mapa em entidades para poder ser scrollado
@@ -33,7 +33,7 @@ class Game:
 			x = randint(50, self.width-50)
 			self.entities.add(entities.Enemy(self, tank.TankDefault(), (x, self.map.getMaxHeight(x))))
 
-		self.hud.setStatus('Carregando interface...', 80)
+		self.hud.setStatus('Carregando interface...', 99)
 		self.hud = hud.Hud(self, my.ENGINE.screen)
 		my.ENGINE.interface = self.hud
 		self.turncontroller = turn.TurnController(self)

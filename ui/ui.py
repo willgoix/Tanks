@@ -26,6 +26,7 @@ def loadImages(directory):
 
 
 class UI:
+
 	def __init__(self, screen):
 		self.screen = screen
 		self.widgets = []

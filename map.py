@@ -1,9 +1,8 @@
-import pygame, my
-import random, math
+import pygame, my, random, math, lib.delayedfunc
 import lib.opensimplex as opensimplex
 
-FREQUENCY = 8  # 4 elevaçao/zoom, maior = menos distancia entre as ilhas
-OCTAVES = 1  # 4 deixa menos redondo/suave
+FREQUENCY = 2  # 4 elevaçao/zoom, maior = menos distancia entre as ilhas
+OCTAVES = 2  # 4 deixa menos redondo/suave
 REDISTRIBUTION = 1  # 1
 
 
@@ -32,22 +31,23 @@ class Map(pygame.sprite.Sprite):
 		#self.image.set_alpha(150)
 
 	def generate(self):
+
 		for x in range(0, self.width):
-			for y in range(self.height-100, self.height):
-				#noise = int(self.__generateNoise(x, y, self.width, self.height) * 300)+100
+			#my.ENGINE.game.hud.setStatus('Gerando mapa...', my.ENGINE.game.hud.bar.value + 0.1 / self.width)
+			for y in range(self.width-1, self.width):
+				noise = self.__generateNoise(x, y, self.width, self.height)
+				print('x', x , '   y', y)
 
-				#if self.height - noise < len(self.blocks[x]):
-				self.image.set_at((x, y), my.BLOCK_COLORS[my.BLOCK_ROCK])
-				self.blocks[x][y] = my.BLOCK_ROCK
+				self.square(x, y+int(noise*200)-100)
 
-			for y in range(0, self.height):
-				if x == 0 or x == self.width:
-					#noise = int(self.__generateNoise(x, y, self.width, self.height) * 300)+100
 
-					#if self.height - noise < len(self.blocks[x]):
-					self.image.set_at((x, y), my.BLOCK_COLORS[my.BLOCK_ROCK])
-					self.blocks[x][y] = my.BLOCK_ROCK
+	def square(self, xx, y):
+		for yy in range(self.height, y, -1):
+			if xx >= self.width or xx < 0 or yy >= self.height or yy < 0:
+				continue
 
+			self.image.set_at((xx, yy), my.BLOCK_COLORS[my.BLOCK_ROCK])
+			self.blocks[xx][yy] = my.BLOCK_ROCK
 
 	def draw(self, screen):
 		screen.blit(self.image, self.image.get_rect())

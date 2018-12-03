@@ -1,8 +1,6 @@
 import json
 
 
-# Thanks Otávio Capovilla by the idea
-
 class File(object):
 
     def __init__(self, fileName, default={}):
