@@ -1,5 +1,6 @@
-import pygame, my, entities, threading, ui, sound, random
+import pygame, my, entities, ui, sound, random, lib.delayedfunc, threading
 from time import sleep
+from ui import label
 
 
 class TurnController:
@@ -7,7 +8,7 @@ class TurnController:
 	def __init__(self, game):
 		self.game = game
 
-		self.timer = 60
+		self.timer = 25
 		self.currentEntity = None
 		self.currentIndex = -1
 
@@ -34,12 +35,12 @@ class TurnController:
 		if self.currentIndex < len(lives) - 1:
 			if self.currentEntity is not None: self.currentEntity.onEndTurn()
 			self.currentEntity = lives[self.currentIndex]
-			print("TURNO DE: ", self.currentEntity)
-
-			self.timer = 60
+			self.timer = 25
 			self.currentIndex += 1
 
+			self.doTurnAnimation()
 			self.game.entities.setTarget(self.currentEntity)
+
 			if isinstance(self.currentEntity, entities.Player):
 				self.doPlayerTurn(self.currentEntity)
 			else:
@@ -74,3 +75,14 @@ class TurnController:
 
 		threadAnimation = threading.Thread(target=animation)
 		threadAnimation.start()
+
+	def doTurnAnimation(self):
+		text = label.Text(my.SCREEN_HALF_SIZE,
+						  'Seu turno é agora!' if self.currentEntity == self.game.player else 'Turno de: '+ self.currentEntity.nickname,
+						  fontsize=30)
+		self.game.hud.addWidget(text)
+
+		def removeWidget():
+			self.game.hud.removeWidget(text)
+
+		lib.delayedfunc.DelayedFunc(lambda: removeWidget(), 3)

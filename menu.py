@@ -144,7 +144,7 @@ class PlayOfflineMenu(ui.UI):
 
 	def startGame(self):
 		def start():
-			my.ENGINE.game = game.GameOffline(my.SCREEN_WIDTH + 200, my.SCREEN_HEIGHT, 1003, int(self.enemiesValue.text))
+			my.ENGINE.game = game.GameOffline(my.SCREEN_WIDTH + 400, my.SCREEN_HEIGHT, 1003, int(self.enemiesValue.text))
 			my.ENGINE.game.start()
 
 		self.threadStarting = threading.Thread(target=start)
@@ -212,6 +212,13 @@ class OptionsMenu(ui.UI):
 									   image=ui.IMAGES['box'],
 									   image_checked=ui.IMAGES['box_checked']))
 
+		self.addWidget(label.Text([my.SCREEN_HALF_WIDTH + 20, my.SCREEN_HALF_HEIGHT+40], "Áudio, sons e vozes", fontsize=20))
+		self.addWidget(checker.Checker(partial(self.checkedAudio),
+									   [my.SCREEN_HALF_WIDTH - 150, my.SCREEN_HALF_HEIGHT+40],
+									   checked=not my.MUTED,
+									   image=ui.IMAGES['box'],
+									   image_checked=ui.IMAGES['box_checked']))
+
 		self.addWidget(button.ImageButton(lambda: self.back(),
 										  [my.SCREEN_HALF_WIDTH - 20, my.SCREEN_HEIGHT - (my.SCREEN_HEIGHT // 6)],
 										  text="Voltar",
@@ -249,12 +256,16 @@ class OptionsMenu(ui.UI):
 	def checkedHardware(self, value):
 		my.CONFIG.set('hardware_accelerated', value)
 
+	def checkedAudio(self, value):
+		my.CONFIG.set('muted', not value)
+
 	def back(self):
 		self.next = Menu(self.screen)
 
 	def save(self):
 		my.FPS = my.CONFIG.get('fps')
 		my.HARDWARE_ACCELERATED = my.CONFIG.get('hardware_accelerated')
+		my.MUTED = my.CONFIG.get('muted')
 
 		oldwidth, oldwindowed = my.SCREEN_WIDTH, my.WINDOWED
 		my.WINDOWED = my.CONFIG.get('windowed')

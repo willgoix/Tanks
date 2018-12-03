@@ -10,7 +10,18 @@ class Hud(ui.UI):
 		self.game = game
 		self.playersWidgets = {}
 
+		#TODO: Escolher bala?
+		panel = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, 150))
+		self.addWidget(label.Image([10, 10], panel, centralization=ui.RIGHT|ui.BOTTOM))
+
+		#TODO: Fundo cinza?
+		panelLife = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, 180))
+		self.addWidget(label.Image([my.SCREEN_WIDTH - 10, 10], panelLife, centralization=ui.LEFT | ui.BOTTOM))
+		self.addWidget(label.Text([my.SCREEN_WIDTH - 65, 25], 'Vida dos jogadores', centralization=ui.LEFT | ui.BOTTOM))
+
+		y = 40
 		for entity in self.game.getLiveEntities():
+			y += 20
 			self.playersWidgets[entity.id] = [
 				label.Text([entity.pos[0], entity.pos[1]], entity.nickname, high=True),
 
@@ -18,10 +29,18 @@ class Hud(ui.UI):
 						min=0, max=entity.health, initial=entity.health,
 						image_bar_left=ui.IMAGES['bar_red_left'],
 						image_bar_mid=ui.IMAGES['bar_red_mid'],
+						image_bar_right=ui.IMAGES['bar_red_right']),
+
+				bar.Bar([my.SCREEN_WIDTH - panelLife.get_size()[0]/2 - 10, y], size=[panelLife.get_size()[0] - 60, 15],
+						min=0, max=entity.health, initial=entity.health,
+						image_bar_left=ui.IMAGES['bar_red_left'],
+						image_bar_mid=ui.IMAGES['bar_red_mid'],
 						image_bar_right=ui.IMAGES['bar_red_right'])]
 
 			self.addWidget(self.playersWidgets[entity.id][0])
 			self.addWidget(self.playersWidgets[entity.id][1])
+			self.addWidget(self.playersWidgets[entity.id][2])
+			self.addWidget(label.Text([my.SCREEN_WIDTH - panelLife.get_size()[0] + 25, y-7], entity.nickname, centralization=ui.RIGHT | ui.BOTTOM))
 
 		self.next = self
 
@@ -38,6 +57,8 @@ class Hud(ui.UI):
 
 			self.playersWidgets[entity.id][1].pos = [entity.rect.x, entity.rect.y - 40]
 			self.playersWidgets[entity.id][1].value = entity.health
+
+			self.playersWidgets[entity.id][2].value = entity.health
 
 		ui.UI.update(self, events)
 

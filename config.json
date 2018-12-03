@@ -1,7 +1,7 @@
 {
     "fps": 59,
     "hardware_accelerated": true,
-    "muted": false,
+    "muted": true,
     "screen_height": 600,
     "screen_width": 800,
     "windowed": true
