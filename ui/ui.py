@@ -19,39 +19,39 @@ IMAGES = {}
 
 
 def loadImages(directory):
-	for filename in listdir(directory):
-		image = pygame.image.load('{}/{}'.format(directory, filename))#.convert()
-		#image.set_colorkey((0, 0, 0))
-		IMAGES[filename.split(".")[0]] = image
+    for filename in listdir(directory):
+        image = pygame.image.load('{}/{}'.format(directory, filename))  # .convert()
+        # image.set_colorkey((0, 0, 0))
+        IMAGES[filename.split(".")[0]] = image
 
 
 class UI:
 
-	def __init__(self, screen):
-		self.screen = screen
-		self.widgets = []
+    def __init__(self, screen):
+        self.screen = screen
+        self.widgets = []
 
-	def __contains__(self, item):
-		return item in self.widgets
+    def __contains__(self, item):
+        return item in self.widgets
 
-	def __del__(self):
-		self.widgets.clear()
+    def __del__(self):
+        self.widgets.clear()
 
-	def removeWidget(self, widget):
-		self.widgets.remove(widget)
+    def removeWidget(self, widget):
+        self.widgets.remove(widget)
 
-	def addWidget(self, widget):
-		self.widgets.append(widget)
-		widget.render(self.screen)
+    def addWidget(self, widget):
+        self.widgets.append(widget)
+        widget.render(self.screen)
 
-	def update(self, events):
-		for widget in self.widgets:
-			for event in events:
-				if hasattr(event, 'pos'):
-					widget.update(event)
-					continue
+    def update(self, events):
+        for widget in self.widgets:
+            for event in events:
+                if hasattr(event, 'pos'):
+                    widget.update(event)
+                    continue
 
-				if widget.__module__ == 'ui.input':
-					if event.type == pygame.KEYDOWN:
-						widget.update(event)
-			widget.render(self.screen)
+                if widget.__module__ == 'ui.input':
+                    if event.type == pygame.KEYDOWN:
+                        widget.update(event)
+            widget.render(self.screen)

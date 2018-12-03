@@ -1,4 +1,4 @@
-import pygame, math, my, sound, game, threading, loading
+import pygame, math, my, sound, game, threading, loading, random, lib.delayedfunc
 from ui import ui, button, label, slider, checker, bar, input
 from functools import partial
 
@@ -106,6 +106,7 @@ class PlayOfflineMenu(ui.UI):
         self.addWidget(input.TextBox(partial(self.inputName), [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT // 6], [200, 30],
                                      'Digite seu nicknme',
                                      box_image=ui.IMAGES['button']))
+        self.nickname = 'Jogador'
 
         self.enemiesValue = label.Text([my.SCREEN_HALF_WIDTH + 50, my.SCREEN_HALF_HEIGHT // 2 + 40], "5", fontsize=18)
         self.addWidget(self.enemiesValue)
@@ -141,7 +142,7 @@ class PlayOfflineMenu(ui.UI):
         self.enemiesValue.text = str(value)
 
     def inputName(self, value):
-        pass
+        self.nickname = str(value)
 
     def back(self):
         self.next = Menu(self.screen)
@@ -149,11 +150,15 @@ class PlayOfflineMenu(ui.UI):
     def startGame(self):
         # TODO: Configurável o tamanho
         def start():
-            my.ENGINE.game = game.GameOffline(600, my.SCREEN_HEIGHT, 1003, int(self.enemiesValue.text))
+            gameConfigurations = [int(self.enemiesValue.text)]
+            playerConfigurations = [self.nickname]
+            mapConfigurations = [400, 400, random.randint(1000, 10000)]
+
+            my.ENGINE.game = game.GameOffline(gameConfigurations, playerConfigurations, mapConfigurations)
             my.ENGINE.game.start()
 
-        self.threadStarting = threading.Thread(target=start)
-        self.threadStarting.start()
+        threadStarting = threading.Thread(target=start)
+        threadStarting.start()
 
         my.ENGINE.game.hud = loading.Loading(my.ENGINE.screen)  # Ás vezes não carrega a tempo...
         self.next = my.ENGINE.game.hud

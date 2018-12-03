@@ -1,98 +1,123 @@
-import pygame, map, my, entities, camera, hud, loading, tank, bullet, gameserver, turn, sound
+import pygame, map, my, entities, camera, hud, loading, tank, gameserver, turn, sound, menu, lib.delayedfunc
 from random import randint
 
 
 class Game:
 
-	def __init__(self, online, width, height, seed, enemiesCount):
-		self.online = online
-		self.width = width
-		self.height = height
-		self.seed = seed
-		self.enemiesCount = enemiesCount
+    """
+    gameConfigurations[1] = enemiesCount
 
-		self.player = None
-		self.entities = None
-		self.map = None
-		self.hud = None
-		self.turncontroller = None
-		self.running = False
+    playerConfigurations[0] = nickname
 
-	def start(self):
-		self.hud = loading.Loading(my.ENGINE.screen)
+    mapConfigurations[0] = width
+    mapConfigurations[1] = height
+    mapConfigurations[3] = seed
+    """
 
-		#self.hud.setStatus('Gerando mapa...', 20)
-		self.map = map.Map(self.width, self.height, self.seed)
-		self.map.generate()
+    def __init__(self, online, gameConfigurations=[], playerConfigurations=[], mapConfigurations=[]):
+        self.online = online
+        self.enemiesCount = gameConfigurations[0]
 
-		self.hud.setStatus('Carregando entidades...', 80)
-		self.player = entities.Player(self, 'Tester', tank.TankDefault(), (100, 100))
-		self.entities = camera.CameraAwareLayeredUpdates(self.player, pygame.Rect(0, 0, self.width, self.height))
-		self.entities.add(self.map) #Adicionando o mapa em entidades para poder ser scrollado
-		for i in range(0, self.enemiesCount):
-			x = randint(50, self.width-50)
-			self.entities.add(entities.Enemy(self, tank.TankDefault(), (x, self.map.getMaxHeight(x))))
+        self.playerConfigurations = playerConfigurations
 
-		self.hud.setStatus('Carregando interface...', 99)
-		self.hud = hud.Hud(self, my.ENGINE.screen)
-		my.ENGINE.interface = self.hud
-		self.turncontroller = turn.TurnController(self)
-		self.turncontroller.start()
+        self.width = mapConfigurations[0]
+        self.height = mapConfigurations[1]
+        self.seed = mapConfigurations[2]
 
-		self.running = True
+        self.player = None
+        self.entities = None
+        self.map = None
+        self.hud = None
+        self.turncontroller = None
+        self.running = False
 
-	def tick(self):
-		if self.running:
-			for e in my.ENGINE.event_manager.events:
-				if e.type == pygame.KEYDOWN and e.key == pygame.K_t:
-					self.turncontroller.next()
+    def start(self):
+        self.hud = loading.Loading(my.ENGINE.screen)
 
-			""" ATUALIZANDO """
-			self.entities.update()
+        # self.hud.setStatus('Gerando mapa...', 20)
+        self.map = map.Map(self.width, self.height, self.seed)
+        self.map.generate()
 
-			""" DESENHANDO """
-			self.entities.draw(my.ENGINE.screen)
+        self.hud.setStatus('Carregando entidades...', 80)
+        self.player = entities.Player(self, self.playerConfigurations[0], tank.TankDefault(), (100, 100))
+        self.entities = camera.CameraAwareLayeredUpdates(self.player, pygame.Rect(0, 0, self.width, self.height))
+        self.entities.add(self.map)  # Adicionando o mapa em entidades para poder ser scrollado
+        for i in range(0, self.enemiesCount):
+            x = randint(50, self.width - 50)
+            self.entities.add(entities.Enemy(self, tank.TankDefault(), (x, self.map.getMaxHeight(x))))
 
-	def checkWinner(self):
-		lives = self.getLiveEntities()
+        self.hud.setStatus('Carregando interface...', 99)
+        self.hud = hud.Hud(self, my.ENGINE.screen)
+        my.ENGINE.interface = self.hud
+        self.turncontroller = turn.TurnController(self)
+        self.turncontroller.start()
 
-		if len(lives) == 1:
-			winner = lives[0]
+        self.running = True
 
-			if winner == self.player:
-				sound.play('you_win')
+    def tick(self):
+        if self.running:
+            for e in my.ENGINE.event_manager.events:
+                if e.type == pygame.KEYDOWN:
+                    if e.key == pygame.K_t:
+                        self.turncontroller.next()
 
+                    if e.key == pygame.K_m:
+                        self.player.health = 0
 
-	def getLiveEntities(self):
-		list = []
-		for entity in self.entities:
-			if isinstance(entity, entities.Player) or isinstance(entity, entities.Enemy):
-				list.append(entity)
-		return list
+            """ ATUALIZANDO """
+            self.entities.update()
 
-	def getPlayers(self):
-		players = []
-		for entity in self.entities:
-			if isinstance(entity, entities.Player):
-				players.append(entity)
-		return players
+            """ DESENHANDO """
+            self.entities.draw(my.ENGINE.screen)
 
-	def getPlayer(self, id):
-		for entity in self.entities:
-			if isinstance(entity, entities.Player):
-				if entity.id == id:
-					return entity
+    def end(self):
+        self.turncontroller.cancel()
+        lib.delayedfunc.cancelAll()
+        self.running = False
+        self.entities.empty()
+
+        my.ENGINE.interface = menu.Menu(my.ENGINE.screen)
+        my.ENGINE.game = None
+
+    def checkWinner(self):
+        lives = self.getLiveEntities()
+
+        if len(lives) == 1:
+            winner = lives[0]
+
+            if winner == self.player:
+                sound.play('you_win')
+
+    def getLiveEntities(self):
+        list = []
+        for entity in self.entities:
+            if isinstance(entity, entities.Player) or isinstance(entity, entities.Enemy):
+                list.append(entity)
+        return list
+
+    def getPlayers(self):
+        players = []
+        for entity in self.entities:
+            if isinstance(entity, entities.Player):
+                players.append(entity)
+        return players
+
+    def getPlayer(self, id):
+        for entity in self.entities:
+            if isinstance(entity, entities.Player):
+                if entity.id == id:
+                    return entity
 
 
 class GameOffline(Game):
 
-	def __init__(self, width, height, seed, enemiesCount):
-		Game.__init__(self, False, width, height, seed, enemiesCount)
+    def __init__(self, gameConfigurations=[], playerConfigurations=[], mapConfigurations=[]):
+        Game.__init__(self, False, gameConfigurations, playerConfigurations, mapConfigurations)
 
 
 class GameOnline(Game):
 
-	def __init__(self, width, height, seed, enemiesCount, isServer):
-		Game.__init__(self, True, width, height, seed, enemiesCount)
-		self.isServer = isServer
-		self.server = gameserver.GameServer('localhost')
+    def __init__(self, isServer, gameConfigurations=[], playerConfigurations=[], mapConfigurations=[]):
+        Game.__init__(self, True, gameConfigurations, playerConfigurations, mapConfigurations)
+        self.isServer = isServer
+        self.server = gameserver.GameServer('localhost')

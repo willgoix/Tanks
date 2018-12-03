@@ -3,64 +3,68 @@ from ui import ui, label, bar
 from functools import partial
 
 
-
 class Hud(ui.UI):
 
-	def __init__(self, game, screen):
-		ui.UI.__init__(self, screen)
-		self.game = game
-		self.playersWidgets = {}
+    def __init__(self, game, screen):
+        ui.UI.__init__(self, screen)
+        self.game = game
+        self.playersWidgets = {}
 
-		#TODO: Escolher bala?
-		panel = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, 150))
-		self.addWidget(label.Image([10, 10], panel, centralization=ui.RIGHT|ui.BOTTOM))
+        # TODO: Escolher bala?
+        panel = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, 150))
+        self.addWidget(label.Image([10, 10], panel, centralization=ui.RIGHT | ui.BOTTOM))
 
-		#TODO: Fundo cinza?
-		panelLife = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, len(self.game.getLiveEntities()) * 20 + 60))
-		self.addWidget(label.Image([my.SCREEN_WIDTH - 10, 10], panelLife, centralization=ui.LEFT | ui.BOTTOM))
-		self.addWidget(label.Text([my.SCREEN_WIDTH - 65, 25], 'Vida dos jogadores', centralization=ui.LEFT | ui.BOTTOM))
+        # TODO: Fundo cinza?
+        panelLife = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, len(self.game.getLiveEntities()) * 20 + 60))
+        self.addWidget(label.Image([my.SCREEN_WIDTH - 10, 10], panelLife, centralization=ui.LEFT | ui.BOTTOM))
+        self.addWidget(label.Text([my.SCREEN_WIDTH - 65, 25], 'Vida dos jogadores', centralization=ui.LEFT | ui.BOTTOM))
 
-		y = 40
-		for entity in self.game.getLiveEntities():
-			y += 20
-			self.playersWidgets[entity.id] = [
-				label.Text([entity.pos[0], entity.pos[1]], entity.nickname, high=True),
+        y = 40
+        for entity in self.game.getLiveEntities():
+            y += 20
+            self.playersWidgets[entity.id] = [
+                label.Text([entity.pos[0], entity.pos[1]], entity.nickname, high=True),
 
-				bar.Bar([entity.pos[0], entity.pos[1] - 40], size=[entity.image.get_width(), 20],
-						min=0, max=entity.health, initial=entity.health,
-						image_bar_left=ui.IMAGES['bar_red_left'],
-						image_bar_mid=ui.IMAGES['bar_red_mid'],
-						image_bar_right=ui.IMAGES['bar_red_right']),
+                bar.Bar([my.SCREEN_WIDTH -entity.pos[0], entity.pos[1] - 40], size=[entity.image.get_width(), 20],
+                        min=0, max=entity.health, initial=entity.health,
+                        image_bar_left=ui.IMAGES['bar_red_left'],
+                        image_bar_mid=ui.IMAGES['bar_red_mid'],
+                        image_bar_right=ui.IMAGES['bar_red_right']),
 
-				bar.Bar([my.SCREEN_WIDTH - panelLife.get_size()[0]/2 - 10, y], size=[panelLife.get_size()[0] - 60, 15],
-						min=0, max=entity.health, initial=entity.health,
-						image_bar_left=ui.IMAGES['bar_red_left'],
-						image_bar_mid=ui.IMAGES['bar_red_mid'],
-						image_bar_right=ui.IMAGES['bar_red_right'])]
+                bar.Bar([my.SCREEN_WIDTH - panelLife.get_size()[0] / 2 - 10, y],
+                        size=[panelLife.get_size()[0] - 60, 15],
+                        min=0, max=entity.health, initial=entity.health,
+                        image_bar_left=ui.IMAGES['bar_red_left'],
+                        image_bar_mid=ui.IMAGES['bar_red_mid'],
+                        image_bar_right=ui.IMAGES['bar_red_right'])]
 
-			self.addWidget(self.playersWidgets[entity.id][0])
-			self.addWidget(self.playersWidgets[entity.id][1])
-			self.addWidget(self.playersWidgets[entity.id][2])
-			self.addWidget(label.Text([my.SCREEN_WIDTH - panelLife.get_size()[0] + 25, y-7], entity.nickname, centralization=ui.RIGHT | ui.BOTTOM))
+            self.addWidget(self.playersWidgets[entity.id][0])
+            self.addWidget(self.playersWidgets[entity.id][1])
+            self.addWidget(self.playersWidgets[entity.id][2])
+            self.addWidget(label.Text([my.SCREEN_WIDTH - panelLife.get_size()[0] + 25, y - 7], entity.nickname,
+                                      centralization=ui.RIGHT | ui.BOTTOM))
 
-		self.next = self
+        self.next = self
 
-	def removeWidgets(self, entity):
-		for widget in self.playersWidgets[entity.id]:
-			self.removeWidget(widget)
-		del self.playersWidgets[entity.id]
+    def removeWidgets(self, entity):
+        for widget in self.playersWidgets[entity.id]:
+            self.removeWidget(widget)
+        del self.playersWidgets[entity.id]
 
-	def update(self, events):
-		self.screen.fill(my.RED)
+    def update(self, events):
+        self.screen.fill(my.RED)
 
-		for entity in self.game.getLiveEntities():
-			self.playersWidgets[entity.id][0].pos = [entity.rect.x, entity.rect.y - 50]
+        for entity in self.game.getLiveEntities():
+            # NICKNAME
+            self.playersWidgets[entity.id][0].pos = [my.SCREEN_WIDTH - entity.pos[0], my.SCREEN_HEIGHT - entity.pos[1]]
 
-			self.playersWidgets[entity.id][1].pos = [entity.rect.x, entity.rect.y - 40]
-			self.playersWidgets[entity.id][1].value = entity.health
+            # HEALTH BAR
+            self.playersWidgets[entity.id][1].pos = [entity.pos[0], entity.pos[1]]
+            self.playersWidgets[entity.id][1].value = entity.health
 
-			self.playersWidgets[entity.id][2].value = entity.health
+            # HEALTH BAR IN PANEL
+            self.playersWidgets[entity.id][2].value = entity.health
 
-		ui.UI.update(self, events)
+        ui.UI.update(self, events)
 
-		return self.next
+        return self.next
