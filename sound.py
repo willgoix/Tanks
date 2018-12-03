@@ -6,11 +6,11 @@ SOUNDS = {}
 
 
 def loadSounds(directory):
-    for filename in listdir(directory):
-        SOUNDS[filename.split(".")[0]] = pygame.mixer.Sound('{}/{}'.format(directory, filename))
+    pass
 
 
 def play(sound, volume=0.8, varyVolume=False, loops=0):
+    pass
     if not my.MUTED:
         if varyVolume:
             volume -= uniform(0.0, 0.2)
