@@ -1,4 +1,4 @@
-import pygame, my, explosion, math, sound
+import pygame, my, explosion, math, sound, threading, lib.delayedfunc
 from os import listdir
 
 IMAGES = {}
@@ -16,6 +16,7 @@ class Bullet(pygame.sprite.Sprite):
 	def __init__(self, pos, velocity, enemy):
 		pygame.sprite.Sprite.__init__(self)
 		my.ENGINE.game.entities.add(self)
+		my.ENGINE.game.entities.setTarget(self)
 
 		self.image = IMAGES['default_bullet']
 		self.original = self.image.copy()
@@ -32,8 +33,8 @@ class Bullet(pygame.sprite.Sprite):
 		sound.play('launch')
 
 	@staticmethod
-	def from_local(pos, speed, enemy):
-		x, y = pygame.mouse.get_pos()
+	def from_local(pos, speed, enemy, target=None):
+		x, y = pygame.mouse.get_pos() if target is None else target.pos
 		angle = 360 - math.atan2(y - pos[1], x - pos[0]) * 180 / math.pi
 
 		velocityx = speed * math.cos(math.radians(360 - angle))
@@ -56,6 +57,10 @@ class Bullet(pygame.sprite.Sprite):
 
 			explosion.Explosion(self.pos)
 			my.ENGINE.game.entities.remove(self)
+
+			def end():
+				my.ENGINE.game.turncontroller.next()
+			lib.delayedfunc.DelayedFunc(lambda: end(), 3)
 		else:
 			acc = my.GRAVITY #+ self.gs.wind #TODO: Vento
 			self.velocity += acc

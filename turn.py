@@ -1,4 +1,4 @@
-import pygame, my, entities, threading, ui, sound
+import pygame, my, entities, threading, ui, sound, random
 from time import sleep
 
 
@@ -25,17 +25,21 @@ class TurnController:
 				self.next()
 
 	def start(self):
-		self.doAnimation()
+		self.doStartAnimation()
 		self.thread.start()
 
 	def next(self):
 		lives = self.game.getLiveEntities()
 
 		if self.currentIndex < len(lives) - 1:
+			if self.currentEntity is not None: self.currentEntity.onEndTurn()
 			self.currentEntity = lives[self.currentIndex]
+			print("TURNO DE: ", self.currentEntity)
+
 			self.timer = 60
 			self.currentIndex += 1
 
+			self.game.entities.setTarget(self.currentEntity)
 			if isinstance(self.currentEntity, entities.Player):
 				self.doPlayerTurn(self.currentEntity)
 			else:
@@ -45,17 +49,17 @@ class TurnController:
 			self.next()
 
 	def doPlayerTurn(self, entity):
-		self.game.entities.setTarget(entity)
+		sound.play('kill_' + str(random.randint(1, 3)))
 
 	def doAITurn(self, entity):
 		pass
 
-	def doAnimation(self):
+	def doStartAnimation(self):
 		def animation():
 			counter = ui.label.Text(my.SCREEN_HALF_SIZE, '5', fontsize=30)
 			self.game.hud.addWidget(counter)
 
-			for i in range(5, -1, -1):
+			for i in range(0, -1, -1):
 				if i == 0:
 					sound.play('fight')
 					counter.pos[0] -= 60

@@ -44,9 +44,8 @@ class Game:
 	def tick(self):
 		if self.running:
 			for e in my.ENGINE.event_manager.events:
-				if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE:
-					bullet.Bullet.from_local((self.player.rect.x, self.player.rect.y), 10, False)
-					#explosion.Explosion([self.player.rect.x, self.player.rect.y])
+				if e.type == pygame.KEYDOWN and e.key == pygame.K_t:
+					self.turncontroller.next()
 
 			""" ATUALIZANDO """
 			self.entities.update()

@@ -16,12 +16,13 @@ class Entity(pygame.sprite.Sprite):
 		self.rect.y = pos[1]
 
 		self.pos = [pos[0], pos[1]]
-		self.velocity = pygame.Vector2((0, 0)) #my.GRAVITY
+		self.velocity = pygame.Vector2((0, 0))
 		self.onGround = False
 		self.speed = tank.speed
 		self.health = tank.health
 		self.fuel = tank.fuel
 
+		self.launched = False
 		self.flipped = False
 
 	def checkDie(self):
@@ -34,6 +35,9 @@ class Entity(pygame.sprite.Sprite):
 			self.game.checkWinner()
 			return True
 		return False
+
+	def onEndTurn(self):
+		self.fuel = self.tank.fuel
 
 	def collide(self, xvelocity, yvelocity):
 		size = self.rect.w
@@ -75,13 +79,18 @@ class Player(Entity):
 		self.client = gameclient.GameClient(self)
 		self.id = self.client.clientport
 
-		self.fuel = 10000 ################################################################################ remover
-
 	def update(self):
 		oldx, oldy = self.rect.x, self.rect.y
 
 		if self.game.turncontroller.check(self):
 			self.move()
+
+			launch = pygame.key.get_pressed()[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]
+			if not self.launched and launch:
+				self.launched = True
+				self.tank.launch(self.pos)
+		else:
+			self.launched = False
 
 		# Move by gravity
 		if not self.onGround:
@@ -142,7 +151,15 @@ class Enemy(Entity):
 		oldx, oldy = self.rect.x, self.rect.y
 
 		if self.game.turncontroller.check(self):
-			self.move(self.findWaypoint())
+			waypoint = self.findWaypoint()
+			move = self.move(waypoint)
+
+			launch = not move
+			if not self.launched and launch:
+				self.launched = True
+				self.tank.launch(self.pos, True, waypoint[3])
+		else:
+			self.launched = False
 
 		if not self.onGround:
 			self.velocity += my.GRAVITY
@@ -161,15 +178,17 @@ class Enemy(Entity):
 		Entity.checkDie(self)
 
 	def move(self, waypoint):
-		left = not waypoint[0]
-		right = waypoint[0]
+		left = waypoint[0]
+		right = waypoint[1]
 
 		if left or right:
 			self.fuel -= 1
 			if self.fuel <= 0:
-				return None
+				return False
 
-		if waypoint[1] <= 20:
+		if right and waypoint[2] <= 20 or left and waypoint[2] >= -20:
+			return False
+		elif left and waypoint[2] <= 20 or right and waypoint[2] >= -20:
 			left, right = right, left
 
 		if left:
@@ -184,8 +203,10 @@ class Enemy(Entity):
 
 	def findWaypoint(self):
 		nearestx = self.game.width
+		nearestEntity = None
 		for entity in self.game.getLiveEntities():
 			if math.fabs(entity.pos[0] - self.pos[0]) < nearestx:
 				nearestx = entity.pos[0] - self.pos[0]
+				nearestEntity = entity
 
-		return (False, math.fabs(nearestx)) if nearestx < 0 else (True, math.fabs(nearestx)) #direita = true	esquerda = false
+		return (True, False, nearestx, nearestEntity) if nearestx < 0 else (False, True, nearestx, nearestEntity) #direita = true	esquerda = false
