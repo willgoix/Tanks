@@ -15,7 +15,7 @@ class Hud(ui.UI):
 		self.addWidget(label.Image([10, 10], panel, centralization=ui.RIGHT|ui.BOTTOM))
 
 		#TODO: Fundo cinza?
-		panelLife = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, 180))
+		panelLife = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, len(self.game.getLiveEntities()) * 20 + 60))
 		self.addWidget(label.Image([my.SCREEN_WIDTH - 10, 10], panelLife, centralization=ui.LEFT | ui.BOTTOM))
 		self.addWidget(label.Text([my.SCREEN_WIDTH - 65, 25], 'Vida dos jogadores', centralization=ui.LEFT | ui.BOTTOM))
 
