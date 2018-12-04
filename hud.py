@@ -2,7 +2,6 @@ import pygame, math, my, sound, game
 from ui import ui, label, bar
 from functools import partial
 
-
 class Hud(ui.UI):
 
 	def __init__(self, game, screen):
@@ -53,8 +52,8 @@ class Hud(ui.UI):
 						image_bar_mid=ui.IMAGES['bar_red_mid'],
 						image_bar_right=ui.IMAGES['bar_red_right'])]
 
-			self.addWidget(self.playersWidgets[entity.id][0])
-			self.addWidget(self.playersWidgets[entity.id][1])
+			#self.addWidget(self.playersWidgets[entity.id][0])
+			#self.addWidget(self.playersWidgets[entity.id][1])
 			self.addWidget(self.playersWidgets[entity.id][2])
 
 			self.addWidget(label.Text([my.SCREEN_WIDTH - panelLife.get_size()[0] + 25, y - 7], entity.nickname,
@@ -74,13 +73,13 @@ class Hud(ui.UI):
 
 		for entity in self.game.getLiveEntities():
 			# NICKNAME
-			self.playersWidgets[entity.id][0].pos = [entity.pos[0] - (
-				len(entity.nickname) if len(entity.nickname) == 6 else (
-					len(entity.nickname) * 2 if len(entity.nickname) > 6 else 0)), entity.pos[1] - 50]
+			#self.playersWidgets[entity.id][0].pos = [entity.pos[0] - (
+			#	len(entity.nickname) if len(entity.nickname) == 6 else (
+			#		len(entity.nickname) * 2 if len(entity.nickname) > 6 else 0)), entity.pos[1] - 50]
 
 			# HEALTH BAR
-			self.playersWidgets[entity.id][1].pos = [entity.pos[0], entity.pos[1] - 35]
-			self.playersWidgets[entity.id][1].value = entity.health
+		#	self.playersWidgets[entity.id][1].pos = [entity.pos[0], entity.pos[1] - 35]
+		#	self.playersWidgets[entity.id][1].value = entity.health
 
 			# HEALTH BAR IN LEFT PANEL
 			self.playersWidgets[entity.id][2].value = entity.health

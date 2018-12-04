@@ -39,7 +39,8 @@ class Game:
 		self.map.generate()
 
 		self.hud.setStatus('Carregando entidades...', 80)
-		self.player = entities.Player(self, self.playerConfigurations[0], tank.TankDefault(), (100, 100))
+		spawnX = randint(50, self.width-50)
+		self.player = entities.Player(self, self.playerConfigurations[0], tank.TankDefault(), (spawnX, self.map.getMaxHeight(spawnX)))
 		self.entities = camera.CameraAwareLayeredUpdates(self.player, pygame.Rect(0, 0, self.width, self.height))
 		self.entities.add(self.map)  # Adicionando o mapa em entidades para poder ser scrollado
 		for i in range(0, self.enemiesCount):
@@ -60,12 +61,9 @@ class Game:
 		if self.running:
 			my.ENGINE.screen.fill(my.LIGHT_BLUE)
 
-			#TODO: Remover isso
+			#TODO: Remover isso. Cheats.
 			for e in my.ENGINE.event_manager.events:
 				if e.type == pygame.KEYDOWN:
-					if e.key == pygame.K_t:
-						self.turncontroller.next()
-
 					if e.key == pygame.K_m:
 						self.player.health = 0
 

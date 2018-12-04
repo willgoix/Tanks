@@ -115,10 +115,10 @@ class PlayOfflineMenu(ui.UI):
 							 image_slider=ui.IMAGES['slider'],
 							 image_pointer=ui.IMAGES['slider_pointer']))
 
-		self.mapSize = []
+		self.mapSize = [my.SCREEN_WIDTH, my.SCREEN_HEIGHT + 200]
 		contents = []
 		for i in range(0, 500, 100):
-			contents.append(str(my.SCREEN_WIDTH + i) + ' x ' + str(my.SCREEN_HEIGHT + 100))
+			contents.append(str(my.SCREEN_WIDTH + i) + ' x ' + str(my.SCREEN_HEIGHT + 200))
 		self.addWidget(button.Drop(self, contents,
 								   partial(self.selectMapSize),
 								   [my.SCREEN_HALF_WIDTH, my.SCREEN_HALF_HEIGHT],
