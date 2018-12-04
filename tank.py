@@ -6,7 +6,7 @@ TANKS = {}
 class Tank:
 
 	def __init__(self, ID, speed, health, fuel):
-		self.image = pygame.image.load('assets/tanks/tank_{}.png'.format(ID))  # .convert()
+		self.image = pygame.transform.scale(pygame.image.load('assets/tanks/tank_{}.png'.format(ID)), (40, 40))  # .convert()
 		self.speed = speed
 		self.health = health
 		self.fuel = fuel
@@ -14,7 +14,7 @@ class Tank:
 		global TANKS
 		TANKS[ID] = self
 
-	def launch(self, pos, ai=False, target=None):
+	def launch(self, pos, shooter, target=None):
 		pass
 
 
@@ -23,6 +23,6 @@ class TankDefault(Tank):
 	def __init__(self):
 		Tank.__init__(self, 1, 5, 100, 100)
 
-	def launch(self, pos, ai=False, target=None):
-		bullet.Bullet.from_local(pos, 10, ai, target)
+	def launch(self, pos, shooter, target=None):
+		bullet.Bullet.from_local(pos, 10, shooter, target)
 		#TODO: Packet

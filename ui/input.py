@@ -46,10 +46,13 @@ class TextBox(Widget):
 	def render(self, screen):
 		screen.blit(self.box_image, self.pos)
 
+		defaultX = self.pos[0]+self.size[0]//10
+		defaultY = self.pos[1]+self.size[1]//3
+
 		if not self.selected and self.text == '':
-			screen.blit(self.font.render(self.pretext, True, my.GREY), (self.pos[0]+self.size[0]//8, self.pos[1]+self.size[1]//4))
+			screen.blit(self.font.render(self.pretext, True, my.GREY), (defaultX, defaultY))
 		elif len(self.text) > 0:
 			textSurface = self.font.render(self.text, True, (0, 0, 0))
-			screen.blit(textSurface, (self.pos[0]+self.size[0]//8, self.pos[1]+self.size[1]//4))
+			screen.blit(textSurface, (defaultX, defaultY))
 			if self.timer > 20:
-				screen.blit(self.font.render('|', True, (0, 0, 0)),(self.pos[0] + self.size[0]//8 + textSurface.get_width() + 5, self.pos[1] + self.size[1] // 4))
+				screen.blit(self.font.render('|', True, (0, 0, 0)), (defaultX + textSurface.get_width() + 5, defaultY))

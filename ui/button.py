@@ -1,4 +1,4 @@
-import pygame, my
+import pygame, my, sound
 from .ui import CENTER, IMAGES
 from .widget import Widget
 from functools import partial
@@ -25,6 +25,7 @@ class Button(Widget):
     def click(self):
         if self.clicked: return False
 
+        sound.play('click')
         self.clicked = True
         self.onclick()
 

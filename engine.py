@@ -11,7 +11,7 @@ class Engine:
     def __init__(self):
         """ PRE-RUN """
         self.adaptScreen()
-        # pygame.display.set_icon(pygame.image.load('assets/tanks/tank_desert.png'))
+        pygame.display.set_icon(pygame.image.load('assets/tanks/tank_1.png'))
         pygame.display.set_caption("Tanks - Iniciando...")
 
         """ LOADING SCREEN """

@@ -33,17 +33,17 @@ class Map(pygame.sprite.Sprite):
     # self.image.set_alpha(150)
 
     def generate(self):
-
         for x in range(0, self.width):
-            # my.ENGINE.game.hud.setStatus('Gerando mapa...', my.ENGINE.game.hud.bar.value + 0.1 / self.width)
-            for y in range(self.width - 1, self.width):
+            print(x)
+            #my.ENGINE.game.hud.setStatus('Gerando mapa...', my.ENGINE.game.hud.bar.value + 1 / self.width)
+            for y in range(0, 1):
                 noise = self.__generateNoise(x, y, self.width, self.height)
-                print('x', x, '   y', y)
+                #print('x', x, '   y', y)
 
                 self.square(x, y + int(noise * 200) - 100)
 
     def square(self, xx, y):
-        for yy in range(self.height, y, -1):
+        for yy in range(self.height, self.height//2, -1):
             if xx >= self.width or xx < 0 or yy >= self.height or yy < 0:
                 continue
 

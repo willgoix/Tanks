@@ -63,7 +63,7 @@ def FONT_HIGH(size, bold=False, italic=False, underline=False):
 
 
 NAMES = ["Stalin", "Lenin", "Mussolini", "Hitler", "Trump", "Bolsonaro", "Lula",
-		 "Mansilha", "Coelho", "Claiton"]
+		 "Mansilha", "Coelho"]
 
 """ COLORS """
 BLACK = (52, 73, 94)

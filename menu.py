@@ -1,4 +1,4 @@
-import pygame, math, my, sound, game, threading, loading, random, lib.delayedfunc
+import pygame, math, my, game, threading, loading, random, lib.delayedfunc
 from ui import ui, button, label, slider, checker, bar, input
 from functools import partial
 
@@ -77,22 +77,18 @@ class Menu(ui.UI):
         return self.next
 
     def playOffline(self):
-        sound.play('click')
         self.animation = False
         self.next = PlayOfflineMenu(self.screen)
 
     def playOnline(self):
-        sound.play('click')
         self.animation = False
         self.next = PlayOnlineMenu(self.screen)
 
     def options(self):
-        sound.play('click')
         self.animation = False
         self.next = OptionsMenu(self.screen)
 
     def credits(self):
-        sound.play('click')
         self.animation = False
         self.next = CreditsMenu(self.screen)
 
@@ -103,7 +99,7 @@ class PlayOfflineMenu(ui.UI):
 
         self.addWidget(label.Text([50, 50], "Configure o jogo:", fontsize=18, centralization=ui.RIGHT))
 
-        self.addWidget(input.TextBox(partial(self.inputName), [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT // 6], [200, 30],
+        self.addWidget(input.TextBox(partial(self.inputName), [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT // 6], [300, 40],
                                      'Digite seu nicknme',
                                      box_image=ui.IMAGES['button']))
         self.nickname = 'Jogador'
@@ -152,7 +148,7 @@ class PlayOfflineMenu(ui.UI):
         def start():
             gameConfigurations = [int(self.enemiesValue.text)]
             playerConfigurations = [self.nickname]
-            mapConfigurations = [400, 400, random.randint(1000, 10000)]
+            mapConfigurations = [my.SCREEN_WIDTH, my.SCREEN_HEIGHT, random.randint(1000, 10000)]
 
             my.ENGINE.game = game.GameOffline(gameConfigurations, playerConfigurations, mapConfigurations)
             my.ENGINE.game.start()
@@ -199,7 +195,7 @@ class OptionsMenu(ui.UI):
         self.addWidget(label.Text([my.SCREEN_HALF_WIDTH - 25, my.SCREEN_HEIGHT // 6], "FPS", fontsize=20))
         self.addWidget(
             slider.SliderBar(partial(self.sliderFps), [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT // 4], (300, 5), min=20,
-                             max=100, step=1,
+                             max=200, step=1,
                              initial=my.FPS,
                              image_slider=ui.IMAGES['slider'],
                              image_pointer=ui.IMAGES['slider_pointer']))

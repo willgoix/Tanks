@@ -20,8 +20,9 @@ class DelayedFunc:
 				self.delay -= 1
 				time.sleep(1)
 
-				if self.delay <= 0:
+				if self.delay <= 0 and self.thread.isAlive:
 					self.function()
+					self.cancel()
 
 		self.thread = threading.Thread(target=func)
 		self.thread.start()
