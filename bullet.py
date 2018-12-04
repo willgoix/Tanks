@@ -54,17 +54,12 @@ class Bullet(pygame.sprite.Sprite):
 
 	def update(self):
 		if self.hitDetect():
-			# if self.gs.isServer:
-			#	self.gs.remove_blocks(self.pos[0], self.pos[1])  # remove the blocks from the map
-			#	data = pickle.dumps(elf.pos)  # serialize the data (might be overkill here but we wanted to be consistent)
-			#	self.gs.terrainConnection.transport.write(data)
-
 			explosion.Explosion(self.pos)
 			my.ENGINE.game.entities.remove(self)
 
 			lib.delayedfunc.DelayedFunc(lambda: my.ENGINE.game.turncontroller.next(), 2)
 		else:
-			acceleration = my.GRAVITY + my.ENGINE.game.wind.wind #TODO: Vento
+			acceleration = my.GRAVITY + my.ENGINE.game.wind.wind
 			self.velocity += acceleration
 
 			self.pos[0] += self.velocity.x
