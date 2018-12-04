@@ -64,8 +64,8 @@ class Bullet(pygame.sprite.Sprite):
 
 			lib.delayedfunc.DelayedFunc(lambda: my.ENGINE.game.turncontroller.next(), 2)
 		else:
-			acc = my.GRAVITY  # + self.gs.wind #TODO: Vento
-			self.velocity += acc
+			acceleration = my.GRAVITY + my.ENGINE.game.wind.wind #TODO: Vento
+			self.velocity += acceleration
 
 			self.pos[0] += self.velocity.x
 			self.pos[1] += self.velocity.y

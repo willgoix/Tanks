@@ -1,4 +1,4 @@
-import pygame, map, my, entities, camera, hud, loading, tank, gameserver, turn, sound, menu, lib.delayedfunc, ui.label
+import pygame, map, my, entities, camera, hud, loading, tank, gameserver, turn, sound, menu, wind, lib.delayedfunc, ui.label
 from random import randint
 from functools import partial
 
@@ -29,6 +29,7 @@ class Game:
 		self.map = None
 		self.hud = None
 		self.turncontroller = None
+		self.wind = None
 		self.running = False
 
 	def start(self):
@@ -51,6 +52,8 @@ class Game:
 		my.ENGINE.interface = self.hud
 		self.turncontroller = turn.TurnController(self)
 		self.turncontroller.start()
+
+		self.wind = wind.Wind(self)
 
 		self.running = True
 
@@ -78,6 +81,7 @@ class Game:
 	def end(self):
 		lib.delayedfunc.cancelAll()
 		self.turncontroller.cancel()
+		self.wind.cancel()
 		self.running = False
 
 		#self.entities.empty()

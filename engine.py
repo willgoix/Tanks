@@ -8,65 +8,65 @@ import my, ui.ui, event, menu, sound, bullet, explosion
 
 class Engine:
 
-    def __init__(self):
-        """ PRE-RUN """
-        self.adaptScreen()
-        pygame.display.set_icon(pygame.image.load('assets/tanks/tank_1.png'))
-        pygame.display.set_caption("Tanks - Iniciando...")
+	def __init__(self):
+		""" PRE-RUN """
+		self.adaptScreen()
+		pygame.display.set_icon(pygame.image.load('assets/tanks/tank_1.png'))
+		pygame.display.set_caption("Tanks - Iniciando...")
 
-        """ LOADING SCREEN """
-        self.screen.fill(my.RED)
-        text = my.FONT(24).render("Carregando...", True, (0, 0, 0))
-        self.screen.blit(text, (my.SCREEN_HALF_WIDTH - text.get_size()[0] / 2, my.SCREEN_HALF_HEIGHT))
-        pygame.display.update()
+		""" LOADING SCREEN """
+		self.screen.fill(my.RED)
+		text = my.FONT(24).render("Carregando...", True, (0, 0, 0))
+		self.screen.blit(text, (my.SCREEN_HALF_WIDTH - text.get_size()[0] / 2, my.SCREEN_HALF_HEIGHT))
+		pygame.display.update()
 
-        self.game = None
-        self.clock = None
-        self.event_manager = None
-        self.interface = None
-        self.cursor = None
-        self.running = True
+		self.game = None
+		self.clock = None
+		self.event_manager = None
+		self.interface = None
+		self.cursor = None
+		self.running = True
 
-    def adaptScreen(self):
-        if my.WINDOWED:
-            self.screen = pygame.display.set_mode((my.SCREEN_WIDTH, my.SCREEN_HEIGHT))  # , pygame.NOFRAME)
-        else:
-            self.screen = pygame.display.set_mode((my.SCREEN_WIDTH, my.SCREEN_HEIGHT),
-                                                  pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF if my.HARDWARE_ACCELERATED else pygame.FULLSCREEN)
+	def run(self):
+		pygame.display.init()
+		pygame.font.init()
 
-    def setCursor(self, cursor):
-        if cursor != self.cursor:
-            self.cursor = cursor
+		ui.loadImages('assets/ui')
+		bullet.loadImages('assets/bullets')
+		explosion.loadImages('assets/explosion')
+		sound.loadSounds('assets/sounds')
 
-    def run(self):
-        pygame.display.init()
-        pygame.font.init()
+		self.clock = pygame.time.Clock()
+		self.event_manager = event.EventManager()
+		self.interface = menu.Menu(self.screen)
+		self.cursor = ui.IMAGES['cursor']
+		pygame.mouse.set_visible(False)
 
-        ui.loadImages('assets/ui')
-        bullet.loadImages('assets/bullets')
-        explosion.loadImages('assets/explosion')
-        sound.loadSounds('assets/sounds')
+		while self.running:
+			self.event_manager.get()
+			self.interface = self.interface.update(self.event_manager.events)
 
-        self.clock = pygame.time.Clock()
-        self.event_manager = event.EventManager()
-        self.interface = menu.Menu(self.screen)
-        self.cursor = ui.IMAGES['cursor']
-        pygame.mouse.set_visible(False)
+			if self.game is not None:
+				self.game.tick()
 
-        while self.running:
-            self.event_manager.get()
-            self.interface = self.interface.update(self.event_manager.events)
+			self.screen.blit(self.cursor, pygame.mouse.get_pos())
 
-            if self.game is not None:
-                self.game.tick()
+			pygame.display.flip()
+			self.clock.tick(my.FPS)
+			pygame.display.set_caption("Tanks - v" + my.VERSION + " - FPS: " + str(round(self.clock.get_fps(), 1)))
 
-            self.screen.blit(self.cursor, pygame.mouse.get_pos())
+	def adaptScreen(self):
+		if my.WINDOWED:
+			self.screen = pygame.display.set_mode((my.SCREEN_WIDTH, my.SCREEN_HEIGHT))  # , pygame.NOFRAME)
+		else:
+			self.screen = pygame.display.set_mode((my.SCREEN_WIDTH, my.SCREEN_HEIGHT),
+												  pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF if my.HARDWARE_ACCELERATED else pygame.FULLSCREEN)
 
-            pygame.display.flip()
-            self.clock.tick(my.FPS)
-            pygame.display.set_caption("Tanks - v" + my.VERSION + " - FPS: " + str(round(self.clock.get_fps(), 1)))
+	def setCursor(self, cursor):
+		if cursor != self.cursor:
+			self.cursor = cursor
 
 
 if __name__ == '__main__':
-    my.ENGINE = Engine()
-    my.ENGINE.run()
+	my.ENGINE = Engine()
+	my.ENGINE.run()

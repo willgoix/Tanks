@@ -89,4 +89,5 @@ class Hud(ui.UI):
 
 		ui.UI.update(self, events)
 
+
 		return self.next
