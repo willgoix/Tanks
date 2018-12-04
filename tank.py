@@ -21,7 +21,7 @@ class Tank:
 class TankDefault(Tank):
 
 	def __init__(self):
-		Tank.__init__(self, 1, 5, 100, 100)
+		Tank.__init__(self, 1, 4, 100, 100)
 
 	def launch(self, pos, shooter, target=None):
 		bullet.Bullet.from_local(pos, 10, shooter, target)

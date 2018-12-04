@@ -44,10 +44,10 @@ class Engine:
 
 		while self.running:
 			self.event_manager.get()
-			self.interface = self.interface.update(self.event_manager.events)
 
 			if self.game is not None:
 				self.game.tick()
+			self.interface = self.interface.update(self.event_manager.events)
 
 			self.screen.blit(self.cursor, pygame.mouse.get_pos())
 

@@ -39,8 +39,9 @@ class Explosion(pygame.sprite.Sprite):
 		for x in range(x1, x2):
 			for y in range(y1, y2):
 				if math.sqrt((x-self.pos[0])**2 + (y-self.pos[1])**2) <= self.size:
-					my.ENGINE.game.map.blocks[x][y] = my.BLOCK_NONE
-					my.ENGINE.game.map.image.set_at((x, y), my.BLOCK_COLORS[my.BLOCK_NONE])
+					if x < len(my.ENGINE.game.map.blocks) and x > 0 and y < len(my.ENGINE.game.map.blocks[0]) and y > 0:
+						my.ENGINE.game.map.blocks[x][y] = my.BLOCK_NONE
+						my.ENGINE.game.map.image.set_at((x, y), my.BLOCK_COLORS[my.BLOCK_NONE])
 
 	def update(self):
 		self.timer += 1

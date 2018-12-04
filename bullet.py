@@ -1,4 +1,4 @@
-import pygame, my, explosion, math, sound, threading, lib.delayedfunc
+import pygame, my, explosion, math, random, sound, threading, lib.delayedfunc
 from os import listdir
 
 IMAGES = {}
@@ -25,14 +25,14 @@ class Bullet(pygame.sprite.Sprite):
 			self.image = pygame.transform.flip(self.image, False, True)
 		self.original = self.image.copy()
 
-		self.pos = [pos[0], pos[1]]
+		self.pos = [pos[0] + (self.image.get_width() if pygame.mouse.get_pos()[0] > pos[0] else -self.image.get_width()), pos[1]]
 		self.rect = self.image.get_rect(center=self.pos)
-		self.startx = self.pos[0]
+		self.rect.x += self.rect.w if pygame.mouse.get_pos()[0] > pos[0] else -self.rect.w
 
 		self.velocity = velocity
 		self.shooter = shooter
 		self.firing = True
-		self.DAMAGE = 10
+		self.DAMAGE = random.randrange(15, 20)
 
 		sound.play('launch')
 

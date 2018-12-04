@@ -35,14 +35,13 @@ class Game:
 	def start(self):
 		self.hud = loading.Loading(my.ENGINE.screen)
 
-		# self.hud.setStatus('Gerando mapa...', 20)
 		self.map = map.Map(self.width, self.height, self.seed)
 		self.map.generate()
 
 		self.hud.setStatus('Carregando entidades...', 80)
 		self.player = entities.Player(self, self.playerConfigurations[0], tank.TankDefault(), (100, 100))
 		self.entities = camera.CameraAwareLayeredUpdates(self.player, pygame.Rect(0, 0, self.width, self.height))
-		#self.entities.add(self.map)  # Adicionando o mapa em entidades para poder ser scrollado
+		self.entities.add(self.map)  # Adicionando o mapa em entidades para poder ser scrollado
 		for i in range(0, self.enemiesCount):
 			x = randint(50, self.width - 50)
 			self.entities.add(entities.Enemy(self, tank.TankDefault(), (x, self.map.getMaxHeight(x))))
@@ -59,6 +58,8 @@ class Game:
 
 	def tick(self):
 		if self.running:
+			my.ENGINE.screen.fill(my.LIGHT_BLUE)
+
 			#TODO: Remover isso
 			for e in my.ENGINE.event_manager.events:
 				if e.type == pygame.KEYDOWN:
@@ -75,7 +76,7 @@ class Game:
 			self.entities.update()
 
 			""" DESENHANDO """
-			self.map.draw(my.ENGINE.screen)
+			#self.map.draw(my.ENGINE.screen)
 			self.entities.draw(my.ENGINE.screen)
 
 	def end(self):

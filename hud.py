@@ -68,8 +68,6 @@ class Hud(ui.UI):
 		del self.playersWidgets[entity.id]
 
 	def update(self, events):
-		self.screen.fill(my.LIGHT_BLUE)
-
 		self.timer.text = 'Próximo turno: ' + str(self.game.turncontroller.timer)
 		# FUEL BAR IN RIGHT PANEL
 		self.fuel.value = self.game.player.fuel if self.game.player.fuel >= 0 else 0
