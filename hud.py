@@ -63,7 +63,8 @@ class Hud(ui.UI):
 
 	def removeWidgets(self, entity):
 		for widget in self.playersWidgets[entity.id]:
-			self.removeWidget(widget)
+			if widget in self.widgets:
+				self.removeWidget(widget)
 		del self.playersWidgets[entity.id]
 
 	def update(self, events):
