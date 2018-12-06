@@ -6,7 +6,7 @@ QUEUE = []
 def cancelAll():
 	for funcs in queue:
 		funcs.cancel()
-		QUEUE.clear()
+	QUEUE.clear()
 
 
 class DelayedFunc:
