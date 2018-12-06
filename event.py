@@ -1,8 +1,7 @@
 import pygame, my, exitalert
-from sys import exit
-
 
 class EventManager:
+
 	def __init__(self):
 		self.clicked = False
 		self.events = []
@@ -21,11 +20,6 @@ class EventManager:
 				self.clicked = True
 			elif event.type == pygame.MOUSEBUTTONUP:
 				self.clicked = False
-		# TODO: Corrigir tamanho quando está em tela cheia
 
 	def showConfirmExitAlert(self):
 		my.ENGINE.interface = exitalert.ExitAlert(my.ENGINE.screen, my.ENGINE.interface)
-
-	def terminate(self):
-		pygame.quit()
-		exit()

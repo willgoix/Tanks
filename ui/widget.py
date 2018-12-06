@@ -4,7 +4,7 @@ from .ui import CENTER, UPPER, BOTTOM, LEFT, RIGHT
 class Widget:
 
 	def __init__(self, pos, size, centralization=CENTER):
-		self.pos = [pos[0], pos[1]]  #Para não modificar variáveis estáticas
+		self.pos = [pos[0], pos[1]]
 		self.size = [size[0], size[1]]
 
 		if BOTTOM & centralization == BOTTOM:

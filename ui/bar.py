@@ -5,8 +5,7 @@ from .ui import CENTER, IMAGES
 
 class Bar(Widget):
 
-	def __init__(self, pos, size=[0, 0], min=0, max=100, initial=None,
-				image_bar_left=None, image_bar_mid=None, image_bar_right=None):
+	def __init__(self, pos, size=[0, 0], min=0, max=100, initial=None, image_bar_left=None, image_bar_mid=None, image_bar_right=None):
 		Widget.__init__(self, pos, size, CENTER)
 		self.min = min
 		self.max = max
@@ -47,7 +46,6 @@ class Bar(Widget):
 		differencePx = int(self.getValueToPixel() - self.pos[0])
 		rest = int((self.pos[0] + self.size[0]) - self.getValueToPixel())
 
-		# Preenchendo com imagens da barra até o valor
 		x = 0
 		for i in range(0, differencePx):
 			image = self.image_bar_mid
@@ -59,7 +57,6 @@ class Bar(Widget):
 			screen.blit(image, (self.pos[0] + x, self.pos[1]))
 			x += 1
 
-		# Preenchendo com imagens da sombra o restante, até o máximo
 		for i in range(0, rest):
 			image = self.image_shadow_mid
 			if differencePx == 0:

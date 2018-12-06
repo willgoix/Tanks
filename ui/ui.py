@@ -5,8 +5,7 @@ An simple user interface library object-oriented to pygame.
 @author: Willian Gois
 """
 
-import pygame
-from os import listdir
+import pygame, os
 
 """ BITMASK CENTRALIZATIONS """
 CENTER = 0x00
@@ -19,9 +18,8 @@ IMAGES = {}
 
 
 def loadImages(directory):
-    for filename in listdir(directory):
-        image = pygame.image.load('{}/{}'.format(directory, filename))  # .convert()
-        # image.set_colorkey((0, 0, 0))
+    for filename in os.listdir(directory):
+        image = pygame.image.load('{}/{}'.format(directory, filename)) #TODO: Repôr .convert()
         IMAGES[filename.split(".")[0]] = image
 
 

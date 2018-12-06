@@ -28,8 +28,6 @@ class Entity(pygame.sprite.Sprite):
 
 	def checkDie(self):
 		if self.health <= 0:
-			print(self, ' killed')
-			# Packet
 			self.game.hud.removeWidgets(self)
 
 			self.kill()
@@ -215,10 +213,11 @@ class Enemy(Entity):
 
 		maxNearbyDistance = random.randint(150, 300)
 
-		# Caso perto de 100 blocos, se afastar
+		""" Caso perto de 100 blocos, se afastar """
 		if left and distance >= -maxNearbyDistance or right and distance <= maxNearbyDistance:
 			left, right = right, left
-		# Caso tenha passado do novo objetivo (o se afastar), parar
+
+		""" Caso tenha passado do novo objetivo (o se afastar), parar """
 		if right and distance >= maxNearbyDistance or left and distance <= -maxNearbyDistance:
 			return False
 
@@ -248,5 +247,4 @@ class Enemy(Entity):
 			nearestx = self.focusAI.pos[0] - self.pos[0]
 
 
-		return (True, False, nearestx, nearestEntity) if nearestx < 0 else \
-			   (False, True, nearestx, nearestEntity)
+		return (True, False, nearestx, nearestEntity) if nearestx < 0 else (False, True, nearestx, nearestEntity)

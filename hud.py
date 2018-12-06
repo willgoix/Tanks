@@ -10,7 +10,7 @@ class Hud(ui.UI):
 		self.playersWidgets = {}
 
 		''' LEFT BAR '''
-		# TODO: Escolher bala?
+		# TODO: Seleção de munição
 		panel = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, 150))
 		self.addWidget(label.Image([10, 10], panel, centralization=ui.RIGHT | ui.BOTTOM))
 
@@ -27,7 +27,6 @@ class Hud(ui.UI):
 		self.addWidget(label.Text([panel.get_size()[0] // 5, 54], 'Combustível', centralization=ui.RIGHT | ui.BOTTOM))
 
 		''' RIGHT BAR '''
-		# TODO: Fundo cinza?
 		panelLife = pygame.transform.scale(ui.IMAGES['metal_panel'], (250, len(self.game.getLiveEntities()) * 20 + 60))
 		self.addWidget(label.Image([my.SCREEN_WIDTH - 10, 10], panelLife, centralization=ui.LEFT | ui.BOTTOM))
 		self.addWidget(label.Text([my.SCREEN_WIDTH - 65, 25], 'Vida dos jogadores', centralization=ui.LEFT | ui.BOTTOM))
@@ -73,14 +72,16 @@ class Hud(ui.UI):
 		self.fuel.value = self.game.player.fuel if self.game.player.fuel >= 0 else 0
 
 		for entity in self.game.getLiveEntities():
+			""" É necessário adaptar a posição levando em relação o scroll da tela
 			# NICKNAME
-			#self.playersWidgets[entity.id][0].pos = [entity.pos[0] - (
-			#	len(entity.nickname) if len(entity.nickname) == 6 else (
-			#		len(entity.nickname) * 2 if len(entity.nickname) > 6 else 0)), entity.pos[1] - 50]
+			self.playersWidgets[entity.id][0].pos = [entity.pos[0] - (
+				len(entity.nickname) if len(entity.nickname) == 6 else (
+					len(entity.nickname) * 2 if len(entity.nickname) > 6 else 0)), entity.pos[1] - 50]
 
 			# HEALTH BAR
-		#	self.playersWidgets[entity.id][1].pos = [entity.pos[0], entity.pos[1] - 35]
-		#	self.playersWidgets[entity.id][1].value = entity.health
+			self.playersWidgets[entity.id][1].pos = [entity.pos[0], entity.pos[1] - 35]
+			self.playersWidgets[entity.id][1].value = entity.health
+			"""
 
 			# HEALTH BAR IN LEFT PANEL
 			self.playersWidgets[entity.id][2].value = entity.health

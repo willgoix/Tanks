@@ -1,8 +1,8 @@
 import pygame, my, random, math, lib.delayedfunc
 import lib.opensimplex as opensimplex
 
-FREQUENCY = 5  # elevaçao/zoom, maior = menos distancia entre as ilhas
-OCTAVES = 2  # deixa menos redondo/suave
+FREQUENCY = 5 		# elevaçao/zoom, maior = menos distancia entre as ilhas
+OCTAVES = 2  		# deixa menos redondo/suave
 REDISTRIBUTION = 1
 
 

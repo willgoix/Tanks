@@ -4,6 +4,7 @@ from functools import partial
 
 
 class Game:
+
 	"""
 	gameConfigurations[1] = enemiesCount
 
@@ -83,8 +84,6 @@ class Game:
 		self.wind.cancel()
 		self.running = False
 
-		#self.entities.empty()
-		#self.__dict__.clear()
 		self.hud.next = menu.Menu(my.ENGINE.screen)
 		my.ENGINE.game = None
 

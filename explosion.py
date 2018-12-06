@@ -28,9 +28,11 @@ class Explosion(pygame.sprite.Sprite):
 		self.removeBlocks()
 
 	def removeBlocks(self):
-		#  The equation of a circle with center (h,k) and radius r units is (x−h)2+(y−k)2=r2
-		#  https://www.varsitytutors.com/hotmath/hotmath_help/topics/equation-of-a-circle
-
+		"""
+			The equation of a circle with center (h,k) and radius r units is (x−h)2+(y−k)2=r2
+			https://www.varsitytutors.com/hotmath/hotmath_help/topics/equation-of-a-circle
+		"""
+		
 		x1 = self.pos[0] - self.size
 		x2 = self.pos[0] + self.size
 		y1 =  self.pos[1] - self.size

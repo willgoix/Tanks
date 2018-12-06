@@ -1,9 +1,10 @@
-import pygame, my
+import pygame, my, sys
 from ui import ui, label, button
 from menu import Menu
 
 
 class ExitAlert(ui.UI):
+
 	def __init__(self, screen, lastUI):
 		ui.UI.__init__(self, screen)
 		self.lastUI = lastUI
@@ -34,6 +35,7 @@ class ExitAlert(ui.UI):
 
 	def quit(self):
 		pygame.quit()
+		sys.exit()
 
 	def backGame(self):
 		self.next = self.lastUI

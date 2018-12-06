@@ -1,13 +1,11 @@
-import pygame, my, explosion, math, random, sound, threading, lib.delayedfunc
-from os import listdir
+import pygame, my, explosion, math, random, sound, threading, os, lib.delayedfunc
 
 IMAGES = {}
 
 
 def loadImages(directory):
-	for filename in listdir(directory):
-		image = pygame.image.load('{}/{}'.format(directory, filename))  # .convert()
-		# image.set_colorkey((0, 0, 0, 0))
+	for filename in os.listdir(directory):
+		image = pygame.image.load('{}/{}'.format(directory, filename)) #TODO: Repôr .convert()
 		IMAGES[filename.split(".")[0]] = image
 
 

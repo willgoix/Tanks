@@ -40,8 +40,7 @@ class Menu(ui.UI):
 		self.addWidget(self.playOnlineButton)
 		self.addWidget(self.optionsButton)
 		self.addWidget(self.creditsButton)
-		self.addWidget(label.Text([my.SCREEN_WIDTH - 5, my.SCREEN_HEIGHT], "Tanks v" + my.VERSION, 20,
-								  centralization=ui.LEFT | ui.UPPER))
+		self.addWidget(label.Text([my.SCREEN_WIDTH - 5, my.SCREEN_HEIGHT], "Tanks v" + my.VERSION, 20, centralization=ui.LEFT | ui.UPPER))
 
 		self.animation = True
 		self.readyToNext = False
@@ -106,10 +105,8 @@ class PlayOfflineMenu(ui.UI):
 
 		self.enemiesValue = label.Text([my.SCREEN_HALF_WIDTH + 50, my.SCREEN_HALF_HEIGHT // 2 + 40], "5", fontsize=18)
 		self.addWidget(self.enemiesValue)
-		self.addWidget(
-			label.Text([my.SCREEN_HALF_WIDTH - 10, my.SCREEN_HALF_HEIGHT // 2 + 40], "Inimigos", fontsize=18))
-		self.addWidget(
-			slider.SliderBar(partial(self.sliderEnemies), [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT // 3 + 32], (200, 5),
+		self.addWidget(label.Text([my.SCREEN_HALF_WIDTH - 10, my.SCREEN_HALF_HEIGHT // 2 + 40], "Inimigos", fontsize=18))
+		self.addWidget(slider.SliderBar(partial(self.sliderEnemies), [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT // 3 + 32], (200, 5),
 							 min=1, max=10, step=1,
 							 initial=5,
 							 image_slider=ui.IMAGES['slider'],
@@ -163,7 +160,6 @@ class PlayOfflineMenu(ui.UI):
 		self.next = Menu(self.screen)
 
 	def startGame(self):
-		# TODO: Configurável o tamanho
 		def start():
 			gameConfigurations = [int(self.enemiesValue.text)]
 			playerConfigurations = [self.nickname]
@@ -175,11 +171,12 @@ class PlayOfflineMenu(ui.UI):
 		threadStarting = threading.Thread(target=start)
 		threadStarting.start()
 
-		my.ENGINE.game.hud = loading.Loading(my.ENGINE.screen)  # Ás vezes não carrega a tempo...
+		my.ENGINE.game.hud = loading.Loading(my.ENGINE.screen)
 		self.next = my.ENGINE.game.hud
 
 
 class PlayOnlineMenu(ui.UI):
+
 	def __init__(self, screen):
 		ui.UI.__init__(self, screen)
 
@@ -189,9 +186,6 @@ class PlayOnlineMenu(ui.UI):
 										  text="Voltar",
 										  image_surface=ui.IMAGES['button'],
 										  image_pressed=ui.IMAGES['button_pressed']))
-
-		# self.input = input.TextBox(partial(self.input), [my.SCREEN_HALF_WIDTH, 100], [200,30], 'Digite aqui', box_image=ui.IMAGES['button'])
-		# self.addWidget(self.input)
 
 		self.next = self
 
@@ -206,14 +200,14 @@ class PlayOnlineMenu(ui.UI):
 
 
 class OptionsMenu(ui.UI):
+
 	def __init__(self, screen):
 		ui.UI.__init__(self, screen)
 
 		self.fpsValue = label.Text([my.SCREEN_HALF_WIDTH + 25, my.SCREEN_HEIGHT // 6], str(my.FPS), fontsize=20)
 		self.addWidget(self.fpsValue)
 		self.addWidget(label.Text([my.SCREEN_HALF_WIDTH - 25, my.SCREEN_HEIGHT // 6], "FPS", fontsize=20))
-		self.addWidget(
-			slider.SliderBar(partial(self.sliderFps), [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT // 4], (300, 5), min=20,
+		self.addWidget(slider.SliderBar(partial(self.sliderFps), [my.SCREEN_HALF_WIDTH, my.SCREEN_HEIGHT // 4], (300, 5), min=20,
 							 max=200, step=1,
 							 initial=my.FPS,
 							 image_slider=ui.IMAGES['slider'],
@@ -231,16 +225,14 @@ class OptionsMenu(ui.UI):
 								   image_pressed=ui.IMAGES['button_pressed'],
 								   down=True))
 
-		self.addWidget(
-			label.Text([my.SCREEN_HALF_WIDTH + 30, my.SCREEN_HALF_HEIGHT], "Acelerar CPU (tela cheia)", fontsize=20))
+		self.addWidget(label.Text([my.SCREEN_HALF_WIDTH + 30, my.SCREEN_HALF_HEIGHT], "Acelerar CPU (tela cheia)", fontsize=20))
 		self.addWidget(checker.Checker(partial(self.checkedHardware),
 									   [my.SCREEN_HALF_WIDTH - 150, my.SCREEN_HALF_HEIGHT],
 									   checked=my.HARDWARE_ACCELERATED,
 									   image=ui.IMAGES['box'],
 									   image_checked=ui.IMAGES['box_checked']))
 
-		self.addWidget(
-			label.Text([my.SCREEN_HALF_WIDTH + 20, my.SCREEN_HALF_HEIGHT + 40], "Áudio, sons e vozes", fontsize=20))
+		self.addWidget(label.Text([my.SCREEN_HALF_WIDTH + 20, my.SCREEN_HALF_HEIGHT + 40], "Áudio, sons e vozes", fontsize=20))
 		self.addWidget(checker.Checker(partial(self.checkedAudio),
 									   [my.SCREEN_HALF_WIDTH - 150, my.SCREEN_HALF_HEIGHT + 40],
 									   checked=not my.MUTED,
@@ -311,6 +303,7 @@ class OptionsMenu(ui.UI):
 
 
 class CreditsMenu(ui.UI):
+
 	def __init__(self, screen):
 		ui.UI.__init__(self, screen)
 

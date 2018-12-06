@@ -3,21 +3,15 @@ from .ui import CENTER, IMAGES
 from .widget import Widget
 from functools import partial
 
-CURSOR_NORMAL = pygame.cursors.arrow
-CURSOR_HOVERED = pygame.cursors.broken_x
-CURSOR_CLICKED = pygame.cursors.diamond
-
 
 class Button(Widget):
+
     def __init__(self, onclick, pos, size, centralization=CENTER):
         Widget.__init__(self, pos, size, centralization)
         self.onclick = onclick
         self.surface = pygame.Surface(size)
         self.clicked = False
         self.hovered = False
-
-    def asRect(self):
-        return pygame.Rect(self.pos, self.size)
 
     def setText(self, text):
         self.text = text
@@ -42,6 +36,7 @@ class Button(Widget):
 
 
 class TextButton(Button):
+
     def __init__(self, onclick, pos, size, text="", color=my.BLACK, centralization=CENTER):
         Button.__init__(self, onclick, pos, size, centralization)
 
@@ -96,8 +91,8 @@ class TextButton(Button):
 
 
 class ImageButton(Button):
-    def __init__(self, onclick, pos, text, image_surface, image_pressed=None, image_hovered=None,
-                 centralization=CENTER):
+
+    def __init__(self, onclick, pos, text, image_surface, image_pressed=None, image_hovered=None, centralization=CENTER):
         Button.__init__(self, onclick, pos, image_surface.get_size(), centralization)
 
         self.text = text
@@ -163,8 +158,7 @@ class ImageButton(Button):
 
 class Drop(ImageButton):
 
-    def __init__(self, ui, contentsName, onselect, pos, text, image_surface, image_pressed=None, image_hovered=None,
-                 down=True, centralization=CENTER):
+    def __init__(self, ui, contentsName, onselect, pos, text, image_surface, image_pressed=None, image_hovered=None, down=True, centralization=CENTER):
         ImageButton.__init__(self, onselect, pos, text, image_surface, image_pressed, image_hovered, centralization)
         self.ui = ui
         self.contents = contentsName

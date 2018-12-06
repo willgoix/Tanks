@@ -1,13 +1,13 @@
-import threading
-import time
+import threading, time
 
-queue = []
+QUEUE = []
 
 
 def cancelAll():
 	for funcs in queue:
 		funcs.cancel()
-	queue.clear()
+		QUEUE.clear()
+
 
 class DelayedFunc:
 
@@ -27,7 +27,7 @@ class DelayedFunc:
 		self.thread = threading.Thread(target=func)
 		self.thread.start()
 
-		queue.append(self)
+		QUEUE.append(self)
 
 	def cancel(self):
 		self.thread.isAlive = False

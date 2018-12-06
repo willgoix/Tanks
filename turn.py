@@ -46,26 +46,20 @@ class TurnController:
 			self.game.entities.setTarget(self.currentEntity)
 
 			if isinstance(self.currentEntity, entities.Player):
-				self.doPlayerTurn(self.currentEntity)
-			else:
-				self.doAITurn(self.currentEntity)
+				self.doPlayerTurn()
 		else:
 			self.currentIndex = 0
 			self.next()
 
-	def doPlayerTurn(self, entity):
+	def doPlayerTurn(self):
 		sound.play('kill_' + str(random.randint(1, 3)))
-
-	def doAITurn(self, entity):
-		pass
 
 	def doStartAnimation(self):
 		def animation():
-			counter = ui.label.Text(my.SCREEN_HALF_SIZE, '5', fontsize=30)
+			counter = ui.label.Text(my.SCREEN_HALF_SIZE, '10', fontsize=30)
 			self.game.hud.addWidget(counter)
 
-			# TODO: Colocar tempo para 10 ao fim dos testes
-			for i in range(0, -1, -1):
+			for i in range(10, -1, -1):
 				if i == 0:
 					sound.play('fight')
 					counter.pos[0] -= 60
@@ -82,9 +76,7 @@ class TurnController:
 		threadAnimation.start()
 
 	def doTurnAnimation(self):
-		text = label.Text(my.SCREEN_HALF_SIZE,
-						  'Seu turno é agora!' if self.currentEntity == self.game.player else 'Turno de: ' + self.currentEntity.nickname,
-						  fontsize=30)
+		text = label.Text(my.SCREEN_HALF_SIZE, 'Seu turno é agora!' if self.currentEntity == self.game.player else 'Turno de: ' + self.currentEntity.nickname, fontsize=30)
 		self.game.hud.addWidget(text)
 
 		lib.delayedfunc.DelayedFunc(partial(self.game.hud.removeWidget, text), 2)

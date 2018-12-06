@@ -1,4 +1,6 @@
-import pygame, file
+import pygame
+from lib import file
+
 
 """ GAME """
 VERSION = "1.0 dev build"
@@ -39,8 +41,13 @@ BLOCK_COLORS = {
 	BLOCK_GRASS: (48, 219, 48, 255)
 }
 
+NAMES = ["Stalin", "Lenin", "Mussolini", "Hitler", "Trump", "Bolsonaro", "Lula",
+		 "Mansilha", "Coelho"]
+
+
 """ PHYSICS"""
 GRAVITY = pygame.Vector2((0, 0.3))
+
 
 """ FONTS """
 pygame.font.init()
@@ -61,9 +68,6 @@ def FONT_HIGH(size, bold=False, italic=False, underline=False):
 	font.set_underline(underline)
 	return font
 
-
-NAMES = ["Stalin", "Lenin", "Mussolini", "Hitler", "Trump", "Bolsonaro", "Lula",
-		 "Mansilha", "Coelho"]
 
 """ COLORS """
 BLACK = (52, 73, 94)
